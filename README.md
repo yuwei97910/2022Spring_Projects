@@ -1,4 +1,13 @@
 # 2022 Spring Projects
+## Introduction
+
+## Game Rules
+
+## 
+
+
+----
+# 2022 Spring Projects Description
 
 Each project from this semester is a public fork linked from this repository.  This is just one of the many assignments students worked on for the course, but this is the *only* one they are permitted to publish openly.
 
