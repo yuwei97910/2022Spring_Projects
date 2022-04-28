@@ -143,8 +143,13 @@ class GameBoard:
         return False
 
     def is_draw(self):
+        # both only had one piece left -> not possible
         if len(self.p1_position) == 1 and len(self.p2_position) == 1:
             return True
+        # # no move is possible
+        # if self.valid_move_list == []:
+        #     return True
+        
         return False
 
     def list_all_valid_moves(self):
@@ -237,8 +242,7 @@ def is_valid(status: GameBoard, start_pos: tuple, move: tuple, last_pos: tuple =
 
 
 def generate_moves(status: GameBoard, start_pos: tuple,
-                   previous_steps: Move = None, is_jumping: bool = False,
-                   last_pos: tuple = None, has_remove: bool = False):
+                   previous_steps: Move = None, is_jumping: bool = False, last_pos: tuple = None):
     """
     start_pos: the original position the piece stands
     previous_steps: a valid move
@@ -283,25 +287,35 @@ def generate_moves(status: GameBoard, start_pos: tuple,
                         jump_through=neighbor, previous_steps=previous_steps):
                 # print('is a valid jump:', move_pos, 'the last pos:', last_pos)
 
-                # Prepare for keep jumping
                 new_status = deepcopy(status)
-                remove_pos = None
+                # print(previous_steps)
+                # If previous jumps had remove a pos
+                if previous_steps is not None:
+                    # print('previous remove:', previous_steps.removed_opponent_pos)
+                    remove_pos = previous_steps.removed_opponent_pos
+                else:
+                    remove_pos = None
+
+                # Prepare for keep jumping
                 if status.turn_player == 'player_1':
                     new_status.p1_position.remove(start_pos)
                     new_status.p1_position.add(move_pos)
-                    if (not has_remove) and neighbor in new_status.p2_position:
+                    # if (not has_remove) and neighbor in new_status.p2_position:
+                    if (not remove_pos) and neighbor in new_status.p2_position:
                         remove_pos = neighbor
-                        print('*** A remove:', remove_pos)
+                        # print('*** A remove:', remove_pos)
                         new_status.p2_position.remove(remove_pos)
-                        has_remove = True
+                        # has_remove = True
 
                 elif status.turn_player == 'player_2':
                     new_status.p2_position.remove(start_pos)
                     new_status.p2_position.add(move_pos)
-                    if (not has_remove) and neighbor in new_status.p1_position:
+                    # if (not has_remove) and neighbor in new_status.p1_position:
+                    if (not remove_pos) and neighbor in new_status.p1_position:
                         remove_pos = neighbor
+                        # print('*** A remove:', remove_pos)
                         new_status.p1_position.remove(remove_pos)
-                        has_remove = True
+                        # has_remove = True
 
                 # Add the option to the result set
                 if not previous_steps:
@@ -320,7 +334,7 @@ def generate_moves(status: GameBoard, start_pos: tuple,
 
                 valid_jump_moves = generate_moves(
                     new_status, new_start_pos, previous_steps=move, is_jumping=True,
-                    last_pos=start_pos, has_remove=has_remove)
+                    last_pos=start_pos)
                 valid_moves = valid_moves + valid_jump_moves
 
     return valid_moves
