@@ -1,10 +1,12 @@
 
 # %%
 
-
 from copy import deepcopy
 import random
-random.seed(0)
+# random.seed(0)
+
+### ---------------------------------------- ###
+
 
 def status_decoder():
     pass
@@ -13,8 +15,9 @@ def status_decoder():
 def status_encoder():
     pass
 
-def random_game_status(seed):
-    pass
+
+### ---------------------------------------- ###
+
 
 class Move:
     def __init__(self, start_pos=None, end_pos=None, removed_opponent_pos=None, jump_through_pos=[]) -> None:
@@ -23,18 +26,23 @@ class Move:
         self.end_pos = end_pos
         self.removed_opponent_pos = removed_opponent_pos
         self.jump_through_pos = jump_through_pos
-        self.move_score = 0
+        # self.move_score = 0
 
+
+### ---------------------------------------- ###
 class GameBoard:
-    _board_size = 8  # default is an 8*8 game
-    _init_pos_size = 4  # 4
+    _board_size = 6  # default is an 8*8 game
+    _init_pos_size = 3  # 4
 
     def __init__(self, **kwag) -> None:
-        self.p1_position = set([(i, j) for i in range(
-            0, self._init_pos_size) for j in range(0, self._init_pos_size-i)])
+        self.p1_position = set([(i, j)
+                                for i in range(0, self._init_pos_size) for j in range(0, self._init_pos_size-i)])
         self.p2_position = set([(self._board_size-1-i, self._board_size-1-j)
-                               for i in range(0, self._init_pos_size) for j in range(0, self._init_pos_size-i)])
+                                for i in range(0, self._init_pos_size) for j in range(0, self._init_pos_size-i)])
         self.turn_player = 'player_1'
+        self.valid_move_list = []
+
+        # Pre-assigned values
         if kwag:
             if 'p1_position' in kwag.keys():
                 self.p1_position = set(kwag['p1_position'])
@@ -42,13 +50,65 @@ class GameBoard:
                 self.p2_position = set(kwag['p2_position'])
             if 'turn_player' in kwag.keys():
                 self.turn_player = kwag['turn_player']
-        self.valid_move_list = []
+
+        # For evaluations
+        self.board_score_depth = 0
+        self.board_score = 0
+        self.opponent_score = 0
+
+    def encoder(self) -> str:
+        # all_pos = [(i, j) for i in range(0, self._board_size)
+        #               for j in range(0, self._board_size)]
+
+        key = ''  # a key to represent a board would be a string in length 1 + 128
+        if self.turn_player == 'player_1':
+            key = key + '0'
+        else:
+            key = key + '1'
+        for i in range(0, self._board_size):
+            for j in range(0, self._board_size):
+                pos = (i, j)
+                pos_str = '00'
+                if pos in self.p1_position:
+                    pos_str = '01'
+                elif pos in self.p2_position:
+                    pos_str = '11'
+                key = key + pos_str
+
+        return key
+
+    @staticmethod
+    def decoder(key):
+        turn_player = ''
+        if key[0] == '0':
+            turn_player = 'player_1'
+        elif key[0] == '1':
+            turn_player = 'player_2'
+
+        i, j = 0, 0
+        pos_pointer = 1
+        p1_position = []
+        p2_position = []
+        while pos_pointer < len(key):
+            if key[pos_pointer:pos_pointer+2] == '01':
+                # print(key[pos_pointer:pos_pointer+2], (i,j))
+                p1_position = p1_position + [(i, j)]
+            elif key[pos_pointer:pos_pointer+2] == '11':
+                # print(key[pos_pointer:pos_pointer+2], (i,j))
+                p2_position = p2_position + [(i, j)]
+
+            pos_pointer += 2
+            j += 1
+            if j % GameBoard._board_size == 0:
+                j = 0
+                i += 1
+
+        return GameBoard(p1_position=p1_position, p2_position=p2_position, turn_player=turn_player)
 
     def generate_round_moves(self):
         """
         ::return:: current_position and new_position
         """
-
 
         # --------- #
         valid_move_list = []
@@ -60,26 +120,28 @@ class GameBoard:
 
         for pos in current_position:
             # print('\n\nGENERATE moves for %s' % (str(pos)))
-            valid_move_list = valid_move_list + generate_moves(self, start_pos=pos)
+            valid_move_list = valid_move_list + \
+                generate_moves(self, start_pos=pos)
         self.valid_move_list = valid_move_list
-        # return move_dict
 
-    def evaluation(self):
-        pass
-    
     def is_winning(self):
         if self.turn_player == 'player_1':
-            if (7, 7) in self.p1_position:
-                return True
-            elif len(self.p2_position) == 1 and len(self.p1_position) > 1:
+            if ((self._board_size - 1, self._board_size - 1) in self.p1_position) or (len(self.p2_position) == 1 and len(self.p1_position) > 1):
                 return True
         elif self.turn_player == 'player_2':
-            if (0, 0) in self.p2_position:
-                return True
-            elif len(self.p1_position) == 1 and len(self.p2_position) > 1:
+            if ((0, 0) in self.p2_position) or (len(self.p1_position) == 1 and len(self.p2_position) > 1):
                 return True
         return False
-    
+
+    def is_loosing(self):
+        if self.turn_player == 'player_1':
+            if (0, 0) in self.p2_position or (len(self.p1_position) == 1 and len(self.p2_position) > 1):
+                return True
+        elif self.turn_player == 'player_2':
+            if (self._board_size - 1, self._board_size - 1) in self.p1_position or (len(self.p2_position) == 1 and len(self.p1_position) > 1):
+                return True
+        return False
+
     def is_draw(self):
         if len(self.p1_position) == 1 and len(self.p2_position) == 1:
             return True
@@ -92,40 +154,65 @@ class GameBoard:
             valid_moves_dict[key_str] = move
         return valid_moves_dict
 
-class HumanPlayer:
-    def __init__(self, player=1) -> None:
-        if player == 1: 
-            self.turn_player = 'player_1'
-        elif player == 2: 
-            self.turn_player = 'player_2'
-        else:
-            raise Exception('The player should be: 1 or 2.')
-    
-    def choose_a_move(self, board:GameBoard) -> Move:
-        valid_moves_dict = board.list_all_valid_moves()
-        print([x for x in valid_moves_dict.keys()])
-        chosen_key = str(input('Input the move option'))
-        return valid_moves_dict[chosen_key] # move
+    def evaluation(self, depth=3):
+        self_score = 0
+        oppo_score = 0
+        # If self winning
+        if self.is_loosing():
+            self_score += -9999999
+            oppo_score += 1000
 
-class RandomPlayer:
-    def __init__(self, player=1) -> None:
-        if player == 1: 
-            self.turn_player = 'player_1'
-        elif player == 2: 
-            self.turn_player = 'player_2'
-        else:
-            raise Exception('The player should be: 1 or 2.')
+        # If self loosing
+        if self.is_winning():
+            self_score += 1000
+            oppo_score += -9999999
 
-    def choose_a_move(self, board:GameBoard) -> Move:
-        random_index = random.randint(0, len(board.valid_move_list)-1)
-        return board.valid_move_list[random_index] # move
+        # If the game draw
+        if self.is_draw():
+            self_score += 100
+            oppo_score += 100
 
-class SmartPlayer:
-    def __init__(self) -> None:
-        pass
+        if self.turn_player == 'player_1':
+            self_target = (self._board_size - 1, self._board_size - 1)
+            oppo_target = (0, 0)
+            self_position = self.p1_position
+            oppo_position = self.p2_position
+
+            # How many piece is still on the board
+            self_piece_cnt = len(self.p1_position)
+            oppo_piece_cnt = len(self.p2_position)
+
+        elif self.turn_player == 'player_2':
+            self_target = (0, 0)
+            oppo_target = (self._board_size - 1, self._board_size - 1)
+            self_position = self.p2_position
+            oppo_position = self.p1_position
+
+            # How many piece is still on the board
+            self_piece_cnt = len(self.p2_position)
+            oppo_piece_cnt = len(self.p1_position)
+
+        # SELF - How each piece close to the target posotion => add weight
+        for pos in self_position:
+            diff = (abs(self_target[0]-pos[0]), abs(self_target[1]-pos[1]))
+            pos_score = (self._board_size -
+                         diff[0]) ** 2 + (self._board_size - diff[1]) ** 2
+            self_score += pos_score
+
+        # OPPO - How each piece close to the target posotion => add weight
+        for pos in oppo_position:
+            diff = (abs(oppo_target[0]-pos[0]), abs(oppo_target[1]-pos[1]))
+            pos_score = (self._board_size - 1 -
+                         diff[0]) ** 2 + (self._board_size - 1 - diff[1]) ** 2
+            oppo_score += pos_score
+
+        self.board_score = self_score + self_piece_cnt * 10
+        self.opponent_score = oppo_score + oppo_piece_cnt * 10
 
 ### ---------------------------------------- ###
 # Functions for playing the game
+
+
 def is_valid(status: GameBoard, start_pos: tuple, move: tuple, last_pos: tuple = None, jump_through: tuple = None, previous_steps: Move = None):
     # if move is out of border
     if move[0] >= status._board_size or move[1] >= status._board_size or move[0] < 0 or move[1] < 0:
@@ -148,9 +235,10 @@ def is_valid(status: GameBoard, start_pos: tuple, move: tuple, last_pos: tuple =
 
     return True
 
+
 def generate_moves(status: GameBoard, start_pos: tuple,
-                    previous_steps: Move = None, is_jumping: bool = False, 
-                    last_pos: tuple=None, has_remove: bool = False):
+                   previous_steps: Move = None, is_jumping: bool = False,
+                   last_pos: tuple = None, has_remove: bool = False):
     """
     start_pos: the original position the piece stands
     previous_steps: a valid move
@@ -166,12 +254,12 @@ def generate_moves(status: GameBoard, start_pos: tuple,
         # --- for player 1: only can move downward or right
         if status.turn_player == 'player_1':
             move_set = [(start_pos[0]+1, start_pos[1]), (start_pos[0],
-                                                            start_pos[1]+1), (start_pos[0]+1, start_pos[1]+1)]
+                                                         start_pos[1]+1), (start_pos[0]+1, start_pos[1]+1)]
 
         # --- for player 2: only can move upward or left
         elif status.turn_player == 'player_2':
             move_set = [(start_pos[0]-1, start_pos[1]), (start_pos[0],
-                                                            start_pos[1]-1), (start_pos[0]-1, start_pos[1]-1)]
+                                                         start_pos[1]-1), (start_pos[0]-1, start_pos[1]-1)]
         for move_pos in move_set:
             if is_valid(status, start_pos, move_pos):
                 # valid_moves = valid_moves + [move_pos]
@@ -191,10 +279,10 @@ def generate_moves(status: GameBoard, start_pos: tuple,
             move_pos = (neighbor[0]+diff[0], neighbor[1]+diff[1])
             # print('try the neighbor:', neighbor, diff, 'jump moves: ', move_pos)
 
-            if is_valid(status, start_pos, move_pos, last_pos=last_pos, 
+            if is_valid(status, start_pos, move_pos, last_pos=last_pos,
                         jump_through=neighbor, previous_steps=previous_steps):
                 # print('is a valid jump:', move_pos, 'the last pos:', last_pos)
-                
+
                 # Prepare for keep jumping
                 new_status = deepcopy(status)
                 remove_pos = None
@@ -203,7 +291,7 @@ def generate_moves(status: GameBoard, start_pos: tuple,
                     new_status.p1_position.add(move_pos)
                     if (not has_remove) and neighbor in new_status.p2_position:
                         remove_pos = neighbor
-                        # print('a remove:', remove_pos)
+                        print('*** A remove:', remove_pos)
                         new_status.p2_position.remove(remove_pos)
                         has_remove = True
 
@@ -217,103 +305,45 @@ def generate_moves(status: GameBoard, start_pos: tuple,
 
                 # Add the option to the result set
                 if not previous_steps:
-                    move = Move(start_pos, move_pos, 
-                        removed_opponent_pos=remove_pos, jump_through_pos=[neighbor])
+                    move = Move(start_pos, move_pos,
+                                removed_opponent_pos=remove_pos, jump_through_pos=[neighbor])
                     valid_moves = valid_moves + [move]
                 else:
-                    jump_through_pos = previous_steps.jump_through_pos + [neighbor]
-                    move = Move(previous_steps.start_pos, move_pos, 
-                        removed_opponent_pos=remove_pos, jump_through_pos=jump_through_pos)
+                    jump_through_pos = previous_steps.jump_through_pos + \
+                        [neighbor]
+                    move = Move(previous_steps.start_pos, move_pos,
+                                removed_opponent_pos=remove_pos, jump_through_pos=jump_through_pos)
                     valid_moves = valid_moves + [move]
 
                 # Try to keep jumping: Create a new game status for making the move:
                 new_start_pos = move_pos
 
                 valid_jump_moves = generate_moves(
-                    new_status, new_start_pos, previous_steps=move, is_jumping=True, 
+                    new_status, new_start_pos, previous_steps=move, is_jumping=True,
                     last_pos=start_pos, has_remove=has_remove)
                 valid_moves = valid_moves + valid_jump_moves
 
     return valid_moves
 
-def make_a_move(board:GameBoard, move:Move):
+
+def make_a_move(board: GameBoard, move: Move):
     new_board = deepcopy(board)
     if new_board.turn_player == 'player_1':
         new_board.p1_position.remove(move.start_pos)
         new_board.p1_position.add(move.end_pos)
         new_board.turn_player = 'player_2'
+        new_board.opponent_score = 'player_1'
         if move.removed_opponent_pos:
             new_board.p2_position.remove(move.removed_opponent_pos)
     elif new_board.turn_player == 'player_2':
         new_board.p2_position.remove(move.start_pos)
         new_board.p2_position.add(move.end_pos)
         new_board.turn_player = 'player_1'
+        new_board.opponent_score = 'player_2'
         if move.removed_opponent_pos:
             new_board.p1_position.remove(move.removed_opponent_pos)
     return new_board
 
-#%%
-# ### ---------------------------------------- ###
-# start a game
-game = GameBoard()
-player_1 = RandomPlayer(player=1)
-player_2 = RandomPlayer(player=2)
-round = 0
-while True:
-    game.generate_round_moves()
-    if game.turn_player == 'player_1':
-        move = player_1.choose_a_move(game)
-    elif game.turn_player == 'player_2':
-        move = player_2.choose_a_move(game)
 
-    game = make_a_move(game, move)
-    round += 1
-    print('Round: %s\nP1: %s\nP2: %s' % (round, game.p1_position, game.p2_position))
-
-    if game.is_draw() or game.is_winning():
-        break
-
-print('The Winner:', game.turn_player, '; Total rounds of the game:', round)
-
-#%%
-### ---------------------------------------- ###
-# a = GameBoard()
-# a.generate_round_moves()
-
-ini_pos_1 = [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0),
-             (1, 1), (1, 2), (2, 0), (2, 1), (3, 0)]
-ini_pos_2 = [(7, 7), (7, 6), (7, 5), (7, 4), (6, 7),
-             (6, 6), (6, 5), (5, 7), (5, 6), (4, 7)]
-a = GameBoard(p1_position=ini_pos_1, p2_position=ini_pos_2, turn_player = 'player_2')
-
-a = GameBoard()
-a.generate_round_moves()
-a.list_all_valid_moves()
-# move_dict = a.generate_round_moves()
-
-#%%
-try_pos_1 = [(2, 0), (3, 2), (3, 1)]
-try_pos_2 = [(4, 3), (4, 5)]
-
-a = GameBoard(p1_position=try_pos_1, p2_position=try_pos_2, turn_player = 'player_2')
-a.generate_round_moves()
-a.list_all_valid_moves()
-# move_dict = a.generate_round_moves()
-
-# move_dict[(3,1)][3] --> this is a move
-# move_dict[(3,1)][3].start_pos
-
-
-# %%
-
-random.seed(0)
-
-# %%
-try_pos_1 = [(2, 0)]
-# try_pos_2 = [(4, 3), (4, 5), (1, 0)]
-try_pos_2 = [(4, 3)]
-try_pos_1 = [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0),
-             (1, 1), (1, 2), (2, 0), (2, 1), (3, 0)]
-try_pos_2 = [(7, 7), (7, 6), (7, 5), (7, 4), (6, 7),
-             (6, 6), (6, 5), (5, 7), (5, 6), (4, 7)]
-game = GameBoard(p1_position=try_pos_1, p2_position=try_pos_2, turn_player = 'player_1')
+def generate_random_game(seed):
+    pass
