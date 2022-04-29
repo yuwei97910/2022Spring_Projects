@@ -1,6 +1,6 @@
 # 2022 Spring Projects: The Conquering Game
 April 29, 2022
-Yu-Wei Lai
+#### Yu-Wei Lai
 
 ----
 
@@ -13,10 +13,15 @@ The idea of the game is from
 1. The player occupy the **target position**.
 2. The player *make the opponent have only one piece left on the board*, and the player has still more than one pieces.
 
+![winning_pos](https://user-images.githubusercontent.com/29009521/165914829-5ad168e3-47a8-4069-8afc-a1c17acaf5d6.png)
+
+![winning_left](https://user-images.githubusercontent.com/29009521/165916961-678a647e-456f-4e9f-a63f-61a0a789c2a9.png)
+
 #### Target Position
 The farest position on the diagonal line.
 In a 6 * 6 setting game, for Player 1 (the left upper player), the target position is (6, 6). For Plyer 2 (the right lower player), the target position would be (0, 0).
 
+<img width="484" alt="target_pos" src="https://user-images.githubusercontent.com/29009521/165913884-db8f62de-ff3f-4042-8d18-56e462342007.png">
 
 #### Draw?
 The original setting of the draw condition would be both players have only one piece left on the board. However, in the current design of the game it will not happen.
@@ -24,7 +29,7 @@ The original setting of the draw condition would be both players have only one p
 ### How to move: Normal Move
 In normal move, a player can only move in the directions that getting closer to the target position. When moving in normal move method, the player can only move one time in a round.
 
-
+<img width="484" alt="normal_move" src="https://user-images.githubusercontent.com/29009521/165913107-849e9db5-df14-4e69-bf52-73f0facbf2ba.png">
 
 ### How to move: Jumping Move
 
