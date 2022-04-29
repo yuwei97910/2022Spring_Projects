@@ -153,11 +153,12 @@ class GameBoard:
         return False
 
     def list_all_valid_moves(self):
-        valid_moves_dict = {}
-        for move in self.valid_move_list:
-            key_str = '{}->{}'.format(move.start_pos, move.end_pos)
-            valid_moves_dict[key_str] = move
-        return valid_moves_dict
+        # valid_moves_dict = {}
+        # for move in self.valid_move_list:
+        #     key_str = '{}->{}'.format(move.start_pos, move.end_pos)
+        #     valid_moves_dict[key_str] = move
+        # return valid_moves_dict
+        return self.valid_move_list
 
     def evaluation(self, depth=3):
         self_score = 0

@@ -13,20 +13,35 @@ class HumanPlayer:
             raise Exception('The player should be: 1 or 2.')
     
     def choose_a_move(self, board:GameBoard) -> Move:
-        valid_moves_dict = board.list_all_valid_moves() # get all valid moves from a game status
+        # valid_moves_dict = board.list_all_valid_moves() # get all valid moves from a game status
+        # # print([x for x in valid_moves_dict.keys()])
+        # display_dict = {}
+        # print("\nHuman Player's Options:")
+        # for i, key in enumerate(valid_moves_dict.keys()):
+        #     print('Option: %s - %s' % (i, key))
+        #     display_dict[i] = key
+
+        # chosen_key = None
+        # while not chosen_key in display_dict:
+        #     chosen_key = int(input('\nPlease Input A Move Option: '))
+        #     if chosen_key not in display_dict:
+        #         print('Please input a valid move!!!')
+        # return valid_moves_dict[display_dict[chosen_key]], 0 # move
+
+        all_valid_moves = board.list_all_valid_moves() # get all valid moves from a game status
         # print([x for x in valid_moves_dict.keys()])
         display_dict = {}
         print("\nHuman Player's Options:")
-        for i, key in enumerate(valid_moves_dict.keys()):
-            print('Option: %s - %s' % (i, key))
-            display_dict[i] = key
+        for i, move in enumerate(all_valid_moves):
+            print('Option: %s - %s->%s; Capture: %s' % (i, move.start_pos, move.end_pos, move.removed_opponent_pos))
+            display_dict[i] = move
 
         chosen_key = None
         while not chosen_key in display_dict:
             chosen_key = int(input('\nPlease Input A Move Option: '))
             if chosen_key not in display_dict:
                 print('Please input a valid move!!!')
-        return valid_moves_dict[display_dict[chosen_key]], 0 # move
+        return all_valid_moves[chosen_key], 0 # move
 
 class RandomPlayer:
     def __init__(self, player=1) -> None:
@@ -104,10 +119,10 @@ class SmartPlayer:
                     temp_board = make_a_move(temp_board, next_move) # player change to self
 
                     # Next Turn: Self
-                    # if temp_board.is_winning(): # self is winning
-                    #     print('Player %s: SELF WINNING' %(temp_board.turn_player))
-                    #     dominant_move = move
-                    #     break
+                    if temp_board.is_winning(): # self is winning
+                        # print('Player %s: SELF WINNING' %(temp_board.turn_player))
+                        dominant_move = move
+                        break
                     if temp_board.is_winning() or temp_board.is_loosing() or temp_board.is_draw():
                         break
                 
@@ -117,12 +132,11 @@ class SmartPlayer:
                     next_move, s = self.choose_a_move(temp_board, self_player, max_depth=max_depth-1)
                     temp_board = make_a_move(temp_board, next_move) # player change to the opponent
 
-                    # # Next Turn: Opponent
-                    # if temp_board.is_loosing(): # opponent is loosing
-                    #     print('Player %s: OPPONENT LOOSING' %(temp_board.turn_player))
-                    #     # dominant_move = move
-                    #     continue
-
+                    # Next Turn: Opponent
+                    if temp_board.is_loosing(): # opponent is loosing
+                        # print('Player %s: OPPONENT LOOSING' %(temp_board.turn_player))
+                        dominant_move = move
+                        break
                     if temp_board.is_winning() or temp_board.is_loosing() or temp_board.is_draw():
                         # dominant_move = move
                         break
@@ -159,33 +173,33 @@ class SmartPlayer:
 
 # game.generate_round_moves()
 
-# game = GameBoard()
-# random.seed(56)
+game = GameBoard()
+random.seed(57)
 
-# # HumanPlayer, SmartPlayer, or RandomPlayer
-# player_1 = RandomPlayer(player=1)
+# HumanPlayer, SmartPlayer, or RandomPlayer
+player_1 = SmartPlayer(player=1)
+player_2 = RandomPlayer(player=2)
 # player_2 = SmartPlayer(player=2)
-# # player_2 = SmartPlayer(player=2)
-# round = 0
-# while not game.is_draw() and not game.is_loosing():
-#     current_player = game.turn_player
-#     game.generate_round_moves()
+round = 0
+while not game.is_draw() and not game.is_loosing():
+    current_player = game.turn_player
+    game.generate_round_moves()
 
-#     print('\n-----------------------------\nRound: %s; Turn: %s\nP1: %s\nP2: %s' % 
-#                 (round, current_player, game.p1_position, game.p2_position))
+    print('\n-----------------------------\nRound: %s; Turn: %s\nP1: %s\nP2: %s' % 
+                (round, current_player, game.p1_position, game.p2_position))
 
-#     if current_player == 'player_1':
-#         move, best_score = player_1.choose_a_move(game)
-#         print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
+    if current_player == 'player_1':
+        move, best_score = player_1.choose_a_move(game)
+        print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
 
-#     elif current_player == 'player_2':
-#         move, best_score = player_2.choose_a_move(game)
-#         print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
+    elif current_player == 'player_2':
+        move, best_score = player_2.choose_a_move(game)
+        print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
 
-#     game = make_a_move(game, move)
-#     round += 1
+    game = make_a_move(game, move)
+    round += 1
 
-# print('The Winner:', current_player, '; Total rounds of the game:', round)
+print('The Winner:', current_player, '; Total rounds of the game:', round)
 
-# print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
+print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
 # %%

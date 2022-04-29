@@ -1,9 +1,15 @@
+"""
+
+"""
+
+
 from curses import window
 import pygame
 import random
-# random.seed(0)
 from game_module import GameBoard, Move, make_a_move
 from game_players import HumanPlayer, RandomPlayer, SmartPlayer
+
+# random.seed(0)
 
 # color
 black = (0, 0, 0)
@@ -23,7 +29,8 @@ RADIUS = 35
 POS_ADJUSTMENT = 40
 
 MARGIN = 0 # This sets the MARGIN between each cell
-WINDOWSIZE=[960, 640]
+# WINDOWSIZE=[960, 640]
+WINDOWSIZE=[640, 480]
 
 def square_colour(row, col):
     """ Determine colour of game board square from its position. """
@@ -55,10 +62,10 @@ def session_end(game):
         winner = 'player_1'
         if game.turn_player == 'player_1':
             winner = 'player_2'
-            print('The Winner:', winner, '; Total rounds of the game:', round)
+            print('The Winner:', winner)
     elif game.is_winning():
         print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
-        print('The Winner:', current_player, '; Total rounds of the game:', round)
+        print('The Winner:', current_player)
     elif game.is_draw():
         print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
         print('DRAW!')
@@ -71,7 +78,6 @@ def session_end(game):
 
 class Button:
     # REF: https://pythonprogramming.altervista.org/buttons-in-pygame/
-    """Create a button, then blit the surface in the while loop"""
     def __init__(self, text,  pos, font, bg="black", feedback=""):
         self.x, self.y = pos
         self.font = pygame.font.SysFont("Arial", font)
@@ -100,37 +106,35 @@ class Button:
                 if self.rect.collidepoint(x, y):
                     self.change_text(self.feedback, bg="red")
 
-
+# -------- Try Given Status ----------- # 
 # Input Status
 # try_pos_1 = [(0, 1), (1, 1), (0, 2), (2, 2)]
 # try_pos_2 = [(5, 5), (3, 1), (3, 4), (4, 3)]
 # game = GameBoard(p1_position=try_pos_1, p2_position=try_pos_2, turn_player='player_1')
 
-
 # player_1 = HumanPlayer(player=1)
 # player_1 = RandomPlayer(player=1)
 # player_2 = RandomPlayer(player=2)
+# game_board_status=[[None] * GameBoard._board_size for _ in range(GameBoard._board_size)]  # Proper initialization.
+
+# -------- Main PyGame Program ----------- # 
+pygame.init()
+pygame.display.set_caption("The Conquer Game")
 
 game = GameBoard()
 player_1 = None
 player_2 = None
-# game_board_status=[[None] * GameBoard._board_size for _ in range(GameBoard._board_size)]  # Proper initialization.
 
-# -------- Main PyGame Program Loop -----------
-pygame.init()
-pygame.display.set_caption("The Conquer Game")
-
-button1 = Button(
-    "Click here",
-    (100, 100),
-    font=30,
-    bg="navy",
-    feedback="You clicked me")
-
+# button1 = Button(
+#     "Click here",
+#     (100, 100),
+#     font=30,
+#     bg="navy",
+#     feedback="You clicked me")
 
 screen = pygame.display.set_mode(WINDOWSIZE)
-is_end = False
 clock = pygame.time.Clock()
+is_end = False
 round = 0
 while not is_end:
     for event in pygame.event.get():
@@ -148,10 +152,13 @@ while not is_end:
     
     # Choose the player type when starting the game
     if player_1 is None or player_2 is None:
-        print('\n-----------------------------\nPlease Choose Player Types:\n1: Human Player\n2: Smart Player\n3: Random Player\n-----------------------------')
-        p1_chocie = int(input('Please Choose the Player Type for Player 1: '))
-        p2_chocie = int(input('Please Choose the Player Type for Player 2: '))
-        print('\n-----------------------------\n')
+        p1_chocie = None
+        p2_chocie = None
+        while p1_chocie not in [1, 2, 3] or p2_chocie not in [1, 2, 3]:
+            print('\n-----------------------------\nPlease Choose Player Types:\n1: Human Player\n2: Smart Player\n3: Random Player\n-----------------------------')
+            p1_chocie = int(input('Please Choose the Player Type for Player 1: '))
+            p2_chocie = int(input('Please Choose the Player Type for Player 2: '))
+            print('-----------------------------\n')
 
         if p1_chocie == 1: player_1 = HumanPlayer(player=1)
         elif p1_chocie == 2: player_1 = SmartPlayer(player=1)
@@ -208,7 +215,9 @@ while not is_end:
             print('DRAW!')
         
         print('\n-----------------------------\nRestart the game?\n-----------------------------\n')
-        end_option = int(input('1: Restart a game; 2: End the session.\nYour Option: '))
+        end_option = None
+        while end_option not in [1, 2]:
+            end_option = int(input('1: Restart a game; 2: End the session.\nYour Option: '))
         if end_option == 1:
             game = GameBoard()
             player_1 = None
