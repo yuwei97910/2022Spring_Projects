@@ -219,24 +219,24 @@ class GameBoard:
 # Functions for playing the game
 
 
-def is_valid(status: GameBoard, start_pos: tuple, move: tuple, last_pos: tuple = None, jump_through: tuple = None, previous_steps: Move = None):
+def is_valid(status: GameBoard, start_pos: tuple, end_pos: tuple, last_pos: tuple = None, jump_through: tuple = None, previous_steps: Move = None):
     # if move is out of border
-    if move[0] >= status._board_size or move[1] >= status._board_size or move[0] < 0 or move[1] < 0:
+    if end_pos[0] >= status._board_size or end_pos[1] >= status._board_size or end_pos[0] < 0 or end_pos[1] < 0:
         return False
 
     # if the move pos is occupied (included intermediate points and end points)
-    if move in status.p1_position or move in status.p2_position:
+    if end_pos in status.p1_position or end_pos in status.p2_position:
         return False
 
     # Prevent jumping back to the start pos
     if last_pos:
-        if move == last_pos:
+        if end_pos == last_pos:
             return False
 
     # Prevent jumping into back patterns
     if jump_through and previous_steps:
         # print('jump_through', jump_through, 'previous_steps.jump_through_pos:', previous_steps.jump_through_pos)
-        if jump_through in previous_steps.jump_through_pos:
+        if jump_through in previous_steps.jump_through_pos or end_pos == previous_steps.start_pos:
             return False
 
     return True

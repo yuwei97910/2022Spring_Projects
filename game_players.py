@@ -115,31 +115,32 @@ class SmartPlayer:
                 # In the opponent's turn, the opponent will also try to maximize their score
                 if self_player != temp_board.turn_player:
                     temp_board.generate_round_moves()
+                    if temp_board.is_winning() or temp_board.is_loosing() or temp_board.is_draw():
+                        break
                     next_move, s = self.choose_a_move(temp_board, self_player, max_depth=max_depth-1)
                     temp_board = make_a_move(temp_board, next_move) # player change to self
 
                     # Next Turn: Self
-                    if temp_board.is_winning(): # self is winning
-                        # print('Player %s: SELF WINNING' %(temp_board.turn_player))
-                        dominant_move = move
-                        break
-                    if temp_board.is_winning() or temp_board.is_loosing() or temp_board.is_draw():
-                        break
+                    # if temp_board.is_winning(): # self is winning
+                    #     # print('Player %s: SELF WINNING' %(temp_board.turn_player))
+                    #     # dominant_move = move
+                    #     break
+
                 
                 # In self's turn choose the maximized score move
                 else:
                     temp_board.generate_round_moves()
+                    if temp_board.is_winning() or temp_board.is_loosing() or temp_board.is_draw():
+                        # dominant_move = move
+                        break
                     next_move, s = self.choose_a_move(temp_board, self_player, max_depth=max_depth-1)
                     temp_board = make_a_move(temp_board, next_move) # player change to the opponent
 
                     # Next Turn: Opponent
-                    if temp_board.is_loosing(): # opponent is loosing
-                        # print('Player %s: OPPONENT LOOSING' %(temp_board.turn_player))
-                        dominant_move = move
-                        break
-                    if temp_board.is_winning() or temp_board.is_loosing() or temp_board.is_draw():
-                        # dominant_move = move
-                        break
+                    # if temp_board.is_loosing(): # opponent is loosing
+                    #     # print('Player %s: OPPONENT LOOSING' %(temp_board.turn_player))
+                    #     dominant_move = move
+                    #     break
 
                 depth += 1
             
@@ -173,33 +174,33 @@ class SmartPlayer:
 
 # game.generate_round_moves()
 
-game = GameBoard()
-random.seed(57)
+# game = GameBoard()
+# random.seed(57)
 
-# HumanPlayer, SmartPlayer, or RandomPlayer
-player_1 = SmartPlayer(player=1)
-player_2 = RandomPlayer(player=2)
-# player_2 = SmartPlayer(player=2)
-round = 0
-while not game.is_draw() and not game.is_loosing():
-    current_player = game.turn_player
-    game.generate_round_moves()
+# # HumanPlayer, SmartPlayer, or RandomPlayer
+# player_1 = SmartPlayer(player=1)
+# player_2 = RandomPlayer(player=2)
+# # player_2 = SmartPlayer(player=2)
+# round = 0
+# while not game.is_draw() and not game.is_loosing():
+#     current_player = game.turn_player
+#     game.generate_round_moves()
 
-    print('\n-----------------------------\nRound: %s; Turn: %s\nP1: %s\nP2: %s' % 
-                (round, current_player, game.p1_position, game.p2_position))
+#     print('\n-----------------------------\nRound: %s; Turn: %s\nP1: %s\nP2: %s' % 
+#                 (round, current_player, game.p1_position, game.p2_position))
 
-    if current_player == 'player_1':
-        move, best_score = player_1.choose_a_move(game)
-        print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
+#     if current_player == 'player_1':
+#         move, best_score = player_1.choose_a_move(game)
+#         print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
 
-    elif current_player == 'player_2':
-        move, best_score = player_2.choose_a_move(game)
-        print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
+#     elif current_player == 'player_2':
+#         move, best_score = player_2.choose_a_move(game)
+#         print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
 
-    game = make_a_move(game, move)
-    round += 1
+#     game = make_a_move(game, move)
+#     round += 1
 
-print('The Winner:', current_player, '; Total rounds of the game:', round)
+# print('The Winner:', current_player, '; Total rounds of the game:', round)
 
-print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
+# print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
 # %%
