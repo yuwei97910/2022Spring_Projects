@@ -5,13 +5,19 @@ Yu-Wei Lai
 ----
 
 # Introduction
-The idea of the game is from 
+The idea of the game is from Chinese Checkers, Halma Game, and English Checkers. There are several adjustments made for the game. For example, compared to Halma, **caturing** is added. Comparing with Chinese Checker, the game plays on a square board, so more possible directions are added. Also, comparing with English Checkers, **jumping moves can be continue** and more directions as well.
 
+#### The Game Board
+<img width="480" alt="image" src="https://user-images.githubusercontent.com/29009521/165926820-20f00b0e-70de-4e59-922b-4e17b7ea6e81.png">
 
 ## Game Rules
+The game can be start with the board in size of 6\*6 or 8\*8. The plyer who plays with the left-upper side (blue pieces) plays first.
+
 ### Winning Condition
 1. The player occupy the **target position**.
 2. The player *make the opponent have only one piece left on the board*, and the player has still more than one pieces.
+
+<img width="780" alt="image" src="https://user-images.githubusercontent.com/29009521/165927671-e13d820e-5a7c-4f84-a748-aa7c65d9c239.png">
 
 #### Target Position
 The farest position on the diagonal line.
@@ -22,12 +28,16 @@ In a 6 * 6 setting game, for Player 1 (the left upper player), the target positi
 The original setting of the draw condition would be both players have only one piece left on the board. However, in the current design of the game it will not happen.
 
 ### How to move: Normal Move
-In normal move, a player can only move in the directions that getting closer to the target position. When moving in normal move method, the player can only move one time in a round.
+In normal move, a player can only move in the directions that getting closer to the target position. When moving in normal move method, the player can only move one time in a round. There are three possible directions.
 
 
 
 ### How to move: Jumping Move
+The jumping idea is similar to the Halma Game or Engilish Checkers. A piece can jump over the pieces which are in its neighbors; that is, 8 possible directions. A piece can jump over both self-player's pieces and opponent's pieces. Jumping moves can be continuely, and the plyer can choose which position to stop. Also, there is a **capturing** in a jumping move. When a piece jumps over any opponent's pieces, the first opponent's piece is captured.
 
+<img width="931" alt="image" src="https://user-images.githubusercontent.com/29009521/165925491-9295db4f-5837-4aac-8d2a-fe695f2e8339.png">
+
+Assuming it is the turn for the blue player, and the player would like to play on the piece on (1, 2). There are 14 possible move methods for this single piece. In the image, the star is the starting position, and the yellow circles are the possible ending positions. The blue triangle is possible captured pieces. One normal move is identified with the green circle.
 
 ## How to start the game?
 ### Starting
