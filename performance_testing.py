@@ -99,7 +99,6 @@ total_time = total_end - total_start
 
 record.write((('Total Games: %s\n'% test_round)))
 record.write((('Total Time: %s\n'% total_time)))
-record.write((('Player 1: %s; Player 2: %s'% (ini_player_1.turn_player, ini_player_2.turn_player))))
 record.write((('Player 1 Total Wins: %s\n'% p1_winning_cnt)))
 record.write((('Player 2 Total Wins: %s\n'% p2_winning_cnt)))
 record.write((('Draws: %s\n'% draw_cnt)))

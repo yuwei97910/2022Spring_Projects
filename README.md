@@ -199,7 +199,6 @@ Also, `GameBoard.generate_round_move` was called numerous times to generate all 
 ### Compete between two random players for 1000 rounds:
 
 Player 1 is the Smart Player and Player 2 is the Random Player:
-
 ```
 Total Games: 1000
 Total Time: 100.71785899999999
@@ -210,6 +209,25 @@ Draws: 0
 
 From the result, we can see that the winning for Player 1 and Player 2 are both close to 50%.
 There is no significant advantages for the player orders.
+
+### Rnadom Players vs Smart Players:
+Player 1: Smart Player, Player 2: Random Player
+```
+Total Games: 50
+Total Time: 7744.0971930000005
+Player 1 Total Wins: 33
+Player 2 Total Looses: 17
+Draws: 0
+```
+
+Player 1: Random Player, Player 2: Smart Player
+```
+Total Games: 50
+Total Time: 8889.898646
+Player 1 Total Wins: 19
+Player 2 Total Wins: 30
+Draws: 1
+```
 
 ### Compete between two AI players for 50 rounds:
 
