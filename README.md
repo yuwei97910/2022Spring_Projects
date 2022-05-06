@@ -61,7 +61,7 @@ Both Player 1 and Player 2 can be one of the three types, so you can choose to p
 
 Belows is the message from the app:
 
-<img width="400" align="center" alt="image" src="https://user-images.githubusercontent.com/29009521/167103457-59732add-8008-4da5-89f8-75da79f28b1e.png">
+<p align="center"><img width="400" alt="image" src="https://user-images.githubusercontent.com/29009521/167103457-59732add-8008-4da5-89f8-75da79f28b1e.png"></p>
 
 There are three options:
 1. Human Player: a human can decide which step to take.
@@ -72,11 +72,10 @@ After picking up the player types, the game will start (GUI will show up after t
 
 As a human player, the user has to pick a move by inputing the option in each turn.
 
-<img width="400" align="center" alt="image" src="https://user-images.githubusercontent.com/29009521/167103482-df059161-88b6-46c0-9534-6afb01afb1b3.png">
+<p align="center"><img width="400" alt="image" src="https://user-images.githubusercontent.com/29009521/167103482-df059161-88b6-46c0-9534-6afb01afb1b3.png"></p>
 
 When a game ends, the app will ask you to restart a game or not:
-
-<img width="400" align="center" alt="image" src="https://user-images.githubusercontent.com/29009521/167103629-e7bac9b2-ff3e-48ba-88f7-1bf0ce0699e0.png">
+<p align="center"><img width="400" alt="image" src="https://user-images.githubusercontent.com/29009521/167103629-e7bac9b2-ff3e-48ba-88f7-1bf0ce0699e0.png"></p>
 
 ----
 # Technical Side of The Game
