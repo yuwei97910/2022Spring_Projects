@@ -1,6 +1,7 @@
 # 2022 Spring IS597 Projects: The C&C Game: Capturing and Conquering Game
-April 29, 2022
-Yu-Wei Lai
+#### April 29, 2022
+
+### Yu-Wei Lai (yuwei6@illinois.edu)
 
 ----
 
