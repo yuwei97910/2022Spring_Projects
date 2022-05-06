@@ -19,14 +19,15 @@ The game can be started with a board size of 6\*6 or 8\*8. The player who plays 
 1. The player occupies the **target position**.
 2. The player *makes the opponent have only one piece left on the board*, and the player still has more than one-pieces.
 
-<img width="780" alt="image" src="https://user-images.githubusercontent.com/29009521/165927671-e13d820e-5a7c-4f84-a748-aa7c65d9c239.png">
+<img width="772" alt="image" src="https://user-images.githubusercontent.com/29009521/167103305-660eca6d-95a0-4310-a11d-2824a09e79bb.png">
+
 
 #### Target Position
 The farthest position on the diagonal line.
 
 In a 6 * 6 setting game, for Player 1 (the left upper player), the target position is (6, 6). The target position for Plyer 2 (the right lower player) would be (0, 0).
 
-<img>
+<img width="499" alt="image" src="https://user-images.githubusercontent.com/29009521/167103355-6a0d8e99-5adb-4774-9a31-57c9c6849971.png">
 
 #### Draw?
 1. The first setting of the draw condition would be both players have only one piece left on the board. However, it will not happen with the current rules of the game since the previous stage would be a winning condition for another player.
@@ -38,7 +39,7 @@ There are two kinds of moving methods: (1) Normal Move and (2) Jumping Move. A p
 #### How to move: Normal Move
 In the normal move, a player can only move in the direction that getting closer to the target position. When moving in the normal move method, the player can only move one time in a single round. There are three possible directions.
 
-
+<img width="376" alt="image" src="https://user-images.githubusercontent.com/29009521/167103163-cd3b8529-894d-44be-9245-e2e1d430b8df.png">
 
 #### How to move: Jumping Move
 The jumping idea is similar to the Halma Game or English Checkers. A piece can jump over the pieces which are in its neighbors; that is, eight possible directions. A piece can jump over both self-player's pieces and opponent's pieces. Jumping moves can be continued, and the plyer can choose which position to stop. 
@@ -47,7 +48,6 @@ The jumping idea is similar to the Halma Game or English Checkers. A piece can j
 Also, the game includes a **capturing** in a jumping move. When a piece jumps over any opponent's pieces, the first opponent's piece is captured. In each round, there is only at most one piece is captured.
 
 <img width="931" alt="image" src="https://user-images.githubusercontent.com/29009521/165925491-9295db4f-5837-4aac-8d2a-fe695f2e8339.png">
-
 
 > Assuming it is the turn for the blue player, and the player would like to play on the piece on (1, 2). There are 14 possible move methods for this single piece. The star is the starting position in the image, and the yellow circles are the possible ending positions. The blue triangle is the possible captured piece. One normal move is identified with the green circle.
 
@@ -60,6 +60,7 @@ After that, the app will ask you to choose the player types for Player 1 and Pla
 Both Player 1 and Player 2 can be one of the three types, so you can choose to play with a random computer, a smarter computer, or even another human.
 
 Belows is the message from the app:
+<img width="675" alt="image" src="https://user-images.githubusercontent.com/29009521/167103457-59732add-8008-4da5-89f8-75da79f28b1e.png">
 
 There are three options:
 1. Human Player: a human can decide which step to take.
@@ -67,6 +68,12 @@ There are three options:
 3. Random Player: a computer player which will randomly pick a random move.
 
 After picking up the player types, the game will start (GUI will show up after this).
+
+As a human player, the user has to pick a move by inputing the option in each turn.
+<img width="675" alt="image" src="https://user-images.githubusercontent.com/29009521/167103482-df059161-88b6-46c0-9534-6afb01afb1b3.png">
+
+When a game ends, the app will ask you to restart a game or not:
+<img width="675" alt="image" src="https://user-images.githubusercontent.com/29009521/167103629-e7bac9b2-ff3e-48ba-88f7-1bf0ce0699e0.png">
 
 ----
 # Technical Side of The Game
@@ -142,6 +149,11 @@ Distance to the target position is included in the evaluations.
 If a player loses a piece on the board, the evaluation includes the score reduction.
 
 #### Performance of the Smart Player's Implementation
+<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103859-148c2bb3-ba0b-47af-afe5-5dc8bbf034ac.png">
+
+<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103922-7d444913-da9a-4f5f-a510-d477870eef2d.png">
+
+
 
 ```
 Total Games: 50
@@ -200,6 +212,7 @@ In current settings, the board size is defined in the `class: GameBoard` and the
 
 
 -----
+# *Project Requirement*
 > # 2022 Spring Projects Description
 >Each project from this semester is a public fork linked from this repository.  This is just one of the many assignments students worked on for the course, but this is the *only* one they are permitted to publish openly.
 >## Final Project Expectations:
