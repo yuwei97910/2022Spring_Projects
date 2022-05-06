@@ -60,7 +60,8 @@ After that, the app will ask you to choose the player types for Player 1 and Pla
 Both Player 1 and Player 2 can be one of the three types, so you can choose to play with a random computer, a smarter computer, or even another human.
 
 Belows is the message from the app:
-<img width="675" alt="image" src="https://user-images.githubusercontent.com/29009521/167103457-59732add-8008-4da5-89f8-75da79f28b1e.png">
+
+<img width="200" style="margin-left: auto; margin-right: auto;" alt="image" src="https://user-images.githubusercontent.com/29009521/167103457-59732add-8008-4da5-89f8-75da79f28b1e.png">
 
 There are three options:
 1. Human Player: a human can decide which step to take.
@@ -70,10 +71,12 @@ There are three options:
 After picking up the player types, the game will start (GUI will show up after this).
 
 As a human player, the user has to pick a move by inputing the option in each turn.
-<img width="675" alt="image" src="https://user-images.githubusercontent.com/29009521/167103482-df059161-88b6-46c0-9534-6afb01afb1b3.png">
+
+<img width="200" style="margin-left: auto; margin-right: auto;" alt="image" src="https://user-images.githubusercontent.com/29009521/167103482-df059161-88b6-46c0-9534-6afb01afb1b3.png">
 
 When a game ends, the app will ask you to restart a game or not:
-<img width="675" alt="image" src="https://user-images.githubusercontent.com/29009521/167103629-e7bac9b2-ff3e-48ba-88f7-1bf0ce0699e0.png">
+
+<img width="200" style="margin-left: auto; margin-right: auto;" alt="image" src="https://user-images.githubusercontent.com/29009521/167103629-e7bac9b2-ff3e-48ba-88f7-1bf0ce0699e0.png">
 
 ----
 # Technical Side of The Game
@@ -149,11 +152,6 @@ Distance to the target position is included in the evaluations.
 If a player loses a piece on the board, the evaluation includes the score reduction.
 
 #### Performance of the Smart Player's Implementation
-<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103859-148c2bb3-ba0b-47af-afe5-5dc8bbf034ac.png">
-
-<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103922-7d444913-da9a-4f5f-a510-d477870eef2d.png">
-
-
 
 ```
 Total Games: 50
@@ -173,6 +171,10 @@ However, this does not apply to competing with human players. The reason is that
 
 -----
 ## Overall Performance Report
+
+<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103859-148c2bb3-ba0b-47af-afe5-5dc8bbf034ac.png">
+
+<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103922-7d444913-da9a-4f5f-a510-d477870eef2d.png">
 
 This is the result of running one single game with Player 1 as the Smart Player and Player 2 as the Random Player. As the resport suggested, 
 
