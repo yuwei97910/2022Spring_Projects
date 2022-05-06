@@ -1,9 +1,15 @@
 
-# %%
+"""
+IS 597 Final Project
+YuWei Lai
+04.29.2022
 
+game_module.py deals with the game status' and moves' information. Includes two classes: Move and GameBoard.
+Also, numerous functions deals with status changing and move generating: generate_moves(), is_valid(), make_a_move()
+"""
+# %%
 from copy import deepcopy
 import random
-# random.seed(0)
 
 ### ---------------------------------------- ###
 class Move:
@@ -44,9 +50,6 @@ class GameBoard:
         self.opponent_score = 0
 
     def encoder(self) -> str:
-        # all_pos = [(i, j) for i in range(0, self._board_size)
-        #               for j in range(0, self._board_size)]
-
         key = ''  # a key to represent a board would be a string in length 1 + 128
         if self.turn_player == 'player_1':
             key = key + '0'
@@ -143,12 +146,12 @@ class GameBoard:
         return False
 
     def list_all_valid_moves(self):
-        valid_moves_dict = {}
-        for move in self.valid_move_list:
-            key_str = '{}->{}'.format(move.start_pos, move.end_pos)
-            valid_moves_dict[key_str] = move
-        return valid_moves_dict
-        # return self.valid_move_list
+        # valid_moves_dict = {}
+        # for move in self.valid_move_list:
+        #     key_str = '{}->{}'.format(move.start_pos, move.end_pos)
+        #     valid_moves_dict[key_str] = move
+        # return valid_moves_dict
+        return self.valid_move_list
 
     def evaluation(self, depth=3):
         self_score = 0
@@ -207,7 +210,6 @@ class GameBoard:
 
 ### ---------------------------------------- ###
 # Functions for playing the game
-
 
 def is_valid(status: GameBoard, start_pos: tuple, end_pos: tuple, last_pos: tuple = None, jump_through: tuple = None, previous_steps: Move = None):
     # if move is out of border

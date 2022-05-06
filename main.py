@@ -1,16 +1,20 @@
 """
+IS 597 Final Project
+YuWei Lai
+04.29.2022
 
+main.py is the main running app which mainly generate the GUI and handle the game's logics.
 """
-
-
+# ---------------------------------------- #
 from curses import window
 import pygame
 import random
 from game_module import GameBoard, Move, make_a_move
 from game_players import HumanPlayer, RandomPlayer, SmartPlayer
-
 # random.seed(0)
 
+# ---------------------------------------- #
+# Constants for PyGame
 # color
 black = (0, 0, 0)
 color_piece_1 = (35, 85, 110)
@@ -19,9 +23,8 @@ color_gray_1 = (235, 235, 235)
 color_gray_2 = (201, 201, 201)
 background_color = (210, 230, 230)
 
-# https://stackoverflow.com/questions/49342252/creating-checkers-pieces-using-a-2d-array-pygame
-
-
+# PyGame Initialization
+# REF: https://stackoverflow.com/questions/49342252/creating-checkers-pieces-using-a-2d-array-pygame
 # This sets the WIDTH and HEIGHT of each grid location
 WIDTH = 80
 HEIGHT = 80
@@ -29,11 +32,10 @@ RADIUS = 35
 POS_ADJUSTMENT = 40
 
 MARGIN = 0 # This sets the MARGIN between each cell
-# WINDOWSIZE=[960, 640]
 WINDOWSIZE=[640, 480]
 
+# ---------------------------------------- #
 def square_colour(row, col):
-    """ Determine colour of game board square from its position. """
     return color_gray_1 if (row + col) % 2 == 0 else color_gray_2  # Makes upper-left corner white.
 
 def board_display(color_gray_1, color_gray_2):
@@ -56,68 +58,9 @@ def pieces_display(p1_position, p2_position, color_piece_1, color_piece_2):
             elif (row, col) in p2_position:
                 pygame.draw.circle(screen, color_piece_2, (col_coordinate, row_coordinate), RADIUS)
 
-def session_end(game):
-    if game.is_loosing():
-        print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
-        winner = 'player_1'
-        if game.turn_player == 'player_1':
-            winner = 'player_2'
-            print('The Winner:', winner)
-    elif game.is_winning():
-        print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
-        print('The Winner:', current_player)
-    elif game.is_draw():
-        print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
-        print('DRAW!')
-    
-    end_surface = pygame.Surface(WINDOWSIZE)
-    end_surface = end_surface.convert_alpha()
-    end_surface.fill((255, 255, 255, 0))
-    pygame.draw.rect(end_surface, color_gray_1, (WIDTH, HEIGHT))
-
-
-class Button:
-    # REF: https://pythonprogramming.altervista.org/buttons-in-pygame/
-    def __init__(self, text,  pos, font, bg="black", feedback=""):
-        self.x, self.y = pos
-        self.font = pygame.font.SysFont("Arial", font)
-        if feedback == "":
-            self.feedback = "text"
-        else:
-            self.feedback = feedback
-        self.change_text(text, bg)
-    
-    def change_text(self, text, bg="black"):
-        """Change the text whe you click"""
-        self.text = self.font.render(text, 1, pygame.Color("White"))
-        self.size = self.text.get_size()
-        self.surface = pygame.Surface(self.size)
-        self.surface.fill(bg)
-        self.surface.blit(self.text, (0, 0))
-        self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
- 
-    def show(self):
-        screen.blit(self.surface, (self.x, self.y))
-
-    def click(self, event):
-        x, y = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if pygame.mouse.get_pressed()[0]:
-                if self.rect.collidepoint(x, y):
-                    self.change_text(self.feedback, bg="red")
-
-# -------- Try Given Status ----------- # 
-# Input Status
-# try_pos_1 = [(0, 1), (1, 1), (0, 2), (2, 2)]
-# try_pos_2 = [(5, 5), (3, 1), (3, 4), (4, 3)]
-# game = GameBoard(p1_position=try_pos_1, p2_position=try_pos_2, turn_player='player_1')
-
-# player_1 = HumanPlayer(player=1)
-# player_1 = RandomPlayer(player=1)
-# player_2 = RandomPlayer(player=2)
-# game_board_status=[[None] * GameBoard._board_size for _ in range(GameBoard._board_size)]  # Proper initialization.
-
-# -------- Main PyGame Program ----------- # 
+# ---------------------------------------- #
+# Main PyGame Program
+# ---------------------------------------- #
 pygame.init()
 pygame.display.set_caption("The Conquer Game")
 
@@ -125,18 +68,13 @@ game = GameBoard()
 player_1 = None
 player_2 = None
 
-# button1 = Button(
-#     "Click here",
-#     (100, 100),
-#     font=30,
-#     bg="navy",
-#     feedback="You clicked me")
-
 screen = pygame.display.set_mode(WINDOWSIZE)
 clock = pygame.time.Clock()
 is_end = False
 round = 0
+
 while not is_end:
+    # ---------------------------------------- #
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_end = True
@@ -145,11 +83,11 @@ while not is_end:
             pos = pygame.mouse.get_pos()
             print(pos)
 
-            # Change the x/y screen coordinates to grid coordinates
+            # Change the x, y screen coordinates to grid coordinates
             column = (pos[0]) // (WIDTH+MARGIN)
             row = pos[1] // (HEIGHT+MARGIN)
-        
-    
+
+    # ---------------------------------------- #
     # Choose the player type when starting the game
     if player_1 is None or player_2 is None:
         p1_chocie = None
@@ -168,8 +106,7 @@ while not is_end:
         elif p2_chocie == 2: player_2 = SmartPlayer(player=2)
         elif p2_chocie == 3: player_2 = RandomPlayer(player=2)
 
-    # session_end(game)
-
+    # ---------------------------------------- #
     # The main operation for the game
     if round >= 1 and not game.is_draw() and not game.is_loosing():
         current_player = game.turn_player
@@ -225,10 +162,5 @@ while not is_end:
             round = 0
         elif end_option == 2:
             is_end = True
-
-    # button1.click(event)
-    # button1.show()
-
-
 
 pygame.quit()

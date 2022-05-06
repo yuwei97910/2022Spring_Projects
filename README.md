@@ -1,4 +1,4 @@
-# 2022 Spring Projects: The C&C Game: Capturing and Conquering Game
+# 2022 Spring IS597 Projects: The C&C Game: Capturing and Conquering Game
 April 29, 2022
 Yu-Wei Lai
 
@@ -10,7 +10,7 @@ C&C Game: Capturing and Conquering Game
 The idea of the game is from Chinese Checkers, Halma Game, and English Checkers. There are several adjustments made to the game. For example, compared to Halma, **capturing** is added. Compared to Chinese Checker, the game plays on a square board, so more possible directions are added. Also, compared with English Checkers, **jumping moves can be continued** and more directions as well.
 
 #### The Game Board
-<img width="480" alt="image" src="https://user-images.githubusercontent.com/29009521/165926820-20f00b0e-70de-4e59-922b-4e17b7ea6e81.png">
+<p align="center"><img width="480" alt="image" src="https://user-images.githubusercontent.com/29009521/165926820-20f00b0e-70de-4e59-922b-4e17b7ea6e81.png"></p>
 
 ## Game Rules
 The game can be started with a board size of 6\*6 or 8\*8. The player who plays with the left-upper side (blue pieces) plays first.
@@ -19,7 +19,7 @@ The game can be started with a board size of 6\*6 or 8\*8. The player who plays 
 1. The player occupies the **target position**.
 2. The player *makes the opponent have only one piece left on the board*, and the player still has more than one-pieces.
 
-<img width="772" alt="image" src="https://user-images.githubusercontent.com/29009521/167103305-660eca6d-95a0-4310-a11d-2824a09e79bb.png">
+<p align="center"><img width="772" alt="image" src="https://user-images.githubusercontent.com/29009521/167103305-660eca6d-95a0-4310-a11d-2824a09e79bb.png"></p>
 
 
 #### Target Position
@@ -27,7 +27,7 @@ The farthest position on the diagonal line.
 
 In a 6 * 6 setting game, for Player 1 (the left upper player), the target position is (6, 6). The target position for Plyer 2 (the right lower player) would be (0, 0).
 
-<img width="499" alt="image" src="https://user-images.githubusercontent.com/29009521/167103355-6a0d8e99-5adb-4774-9a31-57c9c6849971.png">
+<p align="center"><img width="499" alt="image" src="https://user-images.githubusercontent.com/29009521/167103355-6a0d8e99-5adb-4774-9a31-57c9c6849971.png"></p>
 
 #### Draw?
 1. The first setting of the draw condition would be both players have only one piece left on the board. However, it will not happen with the current rules of the game since the previous stage would be a winning condition for another player.
@@ -39,7 +39,7 @@ There are two kinds of moving methods: (1) Normal Move and (2) Jumping Move. A p
 #### How to move: Normal Move
 In the normal move, a player can only move in the direction that getting closer to the target position. When moving in the normal move method, the player can only move one time in a single round. There are three possible directions.
 
-<img width="376" alt="image" src="https://user-images.githubusercontent.com/29009521/167103163-cd3b8529-894d-44be-9245-e2e1d430b8df.png">
+<p align="center"><img width="376" alt="image" src="https://user-images.githubusercontent.com/29009521/167103163-cd3b8529-894d-44be-9245-e2e1d430b8df.png"></p>
 
 #### How to move: Jumping Move
 The jumping idea is similar to the Halma Game or English Checkers. A piece can jump over the pieces which are in its neighbors; that is, eight possible directions. A piece can jump over both self-player's pieces and opponent's pieces. Jumping moves can be continued, and the plyer can choose which position to stop. 
@@ -47,7 +47,7 @@ The jumping idea is similar to the Halma Game or English Checkers. A piece can j
 ##### Capturing
 Also, the game includes a **capturing** in a jumping move. When a piece jumps over any opponent's pieces, the first opponent's piece is captured. In each round, there is only at most one piece is captured.
 
-<img width="931" alt="image" src="https://user-images.githubusercontent.com/29009521/165925491-9295db4f-5837-4aac-8d2a-fe695f2e8339.png">
+<p align="center"><img width="931" alt="image" src="https://user-images.githubusercontent.com/29009521/165925491-9295db4f-5837-4aac-8d2a-fe695f2e8339.png"></p>
 
 > Assuming it is the turn for the blue player, and the player would like to play on the piece on (1, 2). There are 14 possible move methods for this single piece. The star is the starting position in the image, and the yellow circles are the possible ending positions. The blue triangle is the possible captured piece. One normal move is identified with the green circle.
 
@@ -170,17 +170,32 @@ However, this does not apply to competing with human players. The reason is that
 
 -----
 ## Overall Performance Report
+Using PyCharm Profile:
 
-<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103859-148c2bb3-ba0b-47af-afe5-5dc8bbf034ac.png">
+```
+Total Games: 1
+Total Time: 371.017855
+Smart Players Total Wins: 1
+Smart Players Total Looses: 0
+```
+The Profile Report (sorted by Time (ms))
 
-<img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103922-7d444913-da9a-4f5f-a510-d477870eef2d.png">
+<p align="center"><img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103859-148c2bb3-ba0b-47af-afe5-5dc8bbf034ac.png"></p>
 
-This is the result of running one single game with Player 1 as the Smart Player and Player 2 as the Random Player. As the resport suggested, 
+The Profile Report (sorted by Own Time (ms))
+
+<p align="center"><img width="1365" alt="image" src="https://user-images.githubusercontent.com/29009521/167103922-7d444913-da9a-4f5f-a510-d477870eef2d.png"></p>
+
+This is the result of running one single game with Player 1 as the Smart Player and Player 2 as the Random Player. As the report suggested, most of the time is spent on `choose_a_move()` for choosing a move by the Smart Player. This is because of the recursive call for the depth search to generate the best move. However, in that function, we can see that most of the time is spent on `deepcopy()`, which is used to generate the game's deeper status. It should be used to prevent the reversion of the original stage, which does not truly make some moves. In conclusion, the recursive method is quite costly for tons of possible moves, and it is inevitable to prevent using `deepcopy()` for this case. We should consider less depth and a better evaluation for a move for further improvement.
+
+Also, `GameBoard.generate_round_move` was called numerous times to generate all possible moves. The method in `class: GameBoard` will use the function `generate_move()` to generate moves. As mentioned, the function `generate_move()` includes two parts: (1) normal move and (2) jumping move. When generating the jumping moves, it also includes recursive calls. This is why the number of calling `generate_move()` is larger than the number of calling `GameBoard.generate_round_move`.
 
 -----
 # Other Topics
 ## Are there first-mover advantages?
 ### Compete between two random players for 1000 rounds:
+
+Player 1 is the Smart Player and Player 2 is the Random Player:
 
 ```
 Total Games: 1000
@@ -195,6 +210,11 @@ There is no significant advantages for the player orders.
 
 ### Compete between two AI players for 50 rounds:
 
+#### Why Player 2 always win?
+In current settings, there is no randomization included in the Smart Player. Therefore, if two Smart Players are playing, it will always end in the same status because of the defined strategies for evaluation.
+
+The status will always be:
+
 
 
 -----
@@ -203,14 +223,17 @@ There is no significant advantages for the player orders.
 A GUI that do not require the command line. Player can drag the pieces directly to make a move.
 
 ## A Faster Smart Player
-
+As mentioned, currently, the Smart Player takes time to generate moves, especially in the mid-stages of the game. Too many possible moves are included, and the deep-searching recursive calls for evaluations for each would be very costly. If a better evaluation method is included, we may consider not going through a deep search.
 
 ## An adjustable board size with the smart palyer
 In current settings, the board size is defined in the `class: GameBoard` and the size constant is changable. However, when the board size getting larger, the Smart Player cannot generate the moves in the reasonable time. The reason might be that too many possible status in the mid-stages of the game. This improvement shoulf compiled with the faster AI player mentioned above.
 
 -----
 # Reference
-
+- Halma - play free online games. Addicting Games. (2021, April 1). Retrieved May 6, 2022, from https://www.addictinggames.com/puzzle/halma 
+johnmaf23johnmaf23                    3155 bronze badges, &amp; martineaumartineau                    112k2323 gold badges152152 silver badges277277 bronze badges. 
+- Creating checkers pieces using a 2D array - pygame. Stack Overflow. Retrieved May 6, 2022, from https://stackoverflow.com/questions/49342252/creating-checkers-pieces-using-a-2d-array-pygame 
+- Chinese checkers. Wikimedia Foundation. (2022, April 13). Wikipedia. Retrieved May 6, 2022, from https://en.wikipedia.org/wiki/Chinese_checkers
 
 -----
 # *Project Requirement*

@@ -1,21 +1,37 @@
+"""
+IS 597 Final Project
+YuWei Lai
+04.29.2022
+
+performance_testing.py is for testing purpose.
+It will generate performance reports for given rounds and player types
+"""
+
 #%%
+from copy import deepcopy
 import random
+import time
 
 from game_module import GameBoard, Move, make_a_move
 from game_players import HumanPlayer, RandomPlayer, SmartPlayer
 
-import time
+# --------------- #
+# Given testing options
+max_test = 50 # max testing rounds
+file_name = 'performance_testing_two_smart.txt'
 
-test_round = 0
-max_test = 1
+ini_player_1 = SmartPlayer(player=1)
+ini_player_2 = SmartPlayer(player=2)
 
+# --------------- #
 ai_winning_cnt = 0
 ai_loosing_cnt = 0
 draw_cnt = 0
 
-record = open('performance_testing_pycharm.txt', 'w')
+record = open(file_name, 'w')
 record.write('test_round,winner,rounds,time_consumed\n')
 
+test_round = 0
 total_start = time.process_time()
 while test_round < max_test:
     round_start = time.process_time()
@@ -28,9 +44,11 @@ while test_round < max_test:
     game = GameBoard()
     game.generate_round_moves()
 
-    player_1 = SmartPlayer(player=1)
-    player_2 = RandomPlayer(player=2)
-    round = 0
+    # initialize the players
+    player_1 = deepcopy(ini_player_1)
+    player_2 = deepcopy(ini_player_2)
+
+    round = 0 # Single game rounds
     while not game.is_draw() and not game.is_loosing():
         current_player = game.turn_player
 
