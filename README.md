@@ -83,7 +83,7 @@ When a game ends, the app will ask you to restart a game or not:
 ## GUI
 The GUI of the game is built with `PyGame`.
 
-<p align="center">![image](https://user-images.githubusercontent.com/29009521/167118583-3d3bad27-c347-4027-ba8e-2f8dff464ae9.png)</p>
+![image](https://user-images.githubusercontent.com/29009521/167118583-3d3bad27-c347-4027-ba8e-2f8dff464ae9.png)
 
 ## The program
 ### Classes
