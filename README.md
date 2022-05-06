@@ -47,7 +47,7 @@ The jumping idea is similar to the Halma Game or English Checkers. A piece can j
 ##### Capturing
 Also, the game includes a **capturing** in a jumping move. When a piece jumps over any opponent's pieces, the first opponent's piece is captured. In each round, there is only at most one piece is captured.
 
-<p align="center"><img width="931" alt="image" src="https://user-images.githubusercontent.com/29009521/165925491-9295db4f-5837-4aac-8d2a-fe695f2e8339.png"></p>
+<p align="center"><img width="876" alt="image" src="https://user-images.githubusercontent.com/29009521/167117587-d46e44ad-83a5-40d2-b00e-d23e1786051d.png"></p>
 
 > Assuming it is the turn for the blue player, and the player would like to play on the piece on (1, 2). There are 14 possible move methods for this single piece. The star is the starting position in the image, and the yellow circles are the possible ending positions. The blue triangle is the possible captured piece. One normal move is identified with the green circle.
 
@@ -215,7 +215,7 @@ In current settings, there is no randomization included in the Smart Player. The
 
 The status will always be:
 
-
+<p align="center"><img width="483" alt="image" src="https://user-images.githubusercontent.com/29009521/167117657-0cd3032d-0e8f-4a72-bb53-d708952e5d6b.png"></p>
 
 -----
 # Future Improvement
