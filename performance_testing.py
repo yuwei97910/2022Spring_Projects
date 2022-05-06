@@ -1,8 +1,5 @@
-from curses import window
+#%%
 import random
-
-from matplotlib.pyplot import draw
-from numpy import record
 
 from game_module import GameBoard, Move, make_a_move
 from game_players import HumanPlayer, RandomPlayer, SmartPlayer
@@ -10,13 +7,13 @@ from game_players import HumanPlayer, RandomPlayer, SmartPlayer
 import time
 
 test_round = 0
-max_test = 100
+max_test = 1
 
 ai_winning_cnt = 0
 ai_loosing_cnt = 0
 draw_cnt = 0
 
-record = open('performance_testing.txt', 'w')
+record = open('performance_testing_pycharm.txt', 'w')
 record.write('test_round,winner,rounds,time_consumed\n')
 
 total_start = time.process_time()
@@ -29,13 +26,13 @@ while test_round < max_test:
 
     # Test a game
     game = GameBoard()
+    game.generate_round_moves()
 
     player_1 = SmartPlayer(player=1)
     player_2 = RandomPlayer(player=2)
     round = 0
     while not game.is_draw() and not game.is_loosing():
         current_player = game.turn_player
-        game.generate_round_moves()
 
         print('\n-----------------------------\nRound: %s; Turn: %s\nP1: %s\nP2: %s' % 
                     (round, current_player, game.p1_position, game.p2_position))
@@ -49,7 +46,10 @@ while test_round < max_test:
             print('A Move - Chosen Move: ', move.start_pos, move.end_pos, 'Chosen Score: ', best_score)
 
         game = make_a_move(game, move)
+        game.generate_round_moves()
         round += 1
+
+        # print('Game is draw?', game.is_draw(), game.turn_player, 'P1: ', game.p1_position, 'P2: ', game.p2_position, 'Possible Move:', game.list_all_valid_moves())
 
     if game.is_loosing():
         print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))

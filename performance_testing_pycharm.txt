@@ -1,0 +1,7 @@
+test_round,winner,rounds,time_consumed
+1,player_1,33,371.017818
+Total Games: 1
+Total Time: 371.017855
+Smart Players Total Wins: 1
+Smart Players Total Looses: 0
+Draws: 0

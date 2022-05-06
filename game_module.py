@@ -6,19 +6,6 @@ import random
 # random.seed(0)
 
 ### ---------------------------------------- ###
-
-
-def status_decoder():
-    pass
-
-
-def status_encoder():
-    pass
-
-
-### ---------------------------------------- ###
-
-
 class Move:
     def __init__(self, start_pos=None, end_pos=None, removed_opponent_pos=None, jump_through_pos=[]) -> None:
         # print('removed opponent pos: ', removed_opponent_pos)
@@ -146,19 +133,22 @@ class GameBoard:
         # both only had one piece left -> not possible
         if len(self.p1_position) == 1 and len(self.p2_position) == 1:
             return True
-        # # no move is possible
-        # if self.valid_move_list == []:
-        #     return True
+        # no move is possible
+        if self.valid_move_list == []:
+            self.generate_round_moves()
+            if self.valid_move_list == []:
+                print("It is a draw: {} has no possible move. {}", self.turn_player, self.valid_move_list)
+                return True
         
         return False
 
     def list_all_valid_moves(self):
-        # valid_moves_dict = {}
-        # for move in self.valid_move_list:
-        #     key_str = '{}->{}'.format(move.start_pos, move.end_pos)
-        #     valid_moves_dict[key_str] = move
-        # return valid_moves_dict
-        return self.valid_move_list
+        valid_moves_dict = {}
+        for move in self.valid_move_list:
+            key_str = '{}->{}'.format(move.start_pos, move.end_pos)
+            valid_moves_dict[key_str] = move
+        return valid_moves_dict
+        # return self.valid_move_list
 
     def evaluation(self, depth=3):
         self_score = 0
@@ -357,6 +347,7 @@ def make_a_move(board: GameBoard, move: Move):
         new_board.opponent_score = 'player_2'
         if move.removed_opponent_pos:
             new_board.p1_position.remove(move.removed_opponent_pos)
+    new_board.valid_move_list = []
     return new_board
 
 

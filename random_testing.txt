@@ -1002,6 +1002,6 @@ test_round,winner,rounds,time_consumed
 
 Total Games: 1000
 Total Time: 100.71785899999999
-Smart Players Total Wins: 510
-Smart Players Total Looses: 490
+Player 1 Total Wins: 510
+Player 1 Total Looses: 490
 Draws: 0

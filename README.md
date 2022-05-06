@@ -1,49 +1,63 @@
-# 2022 Spring Projects: The Conquering Game
+# 2022 Spring Projects: The C&C Game: Capturing and Conquering Game
 April 29, 2022
 Yu-Wei Lai
 
 ----
 
 # Introduction
-The idea of the game is from Chinese Checkers, Halma Game, and English Checkers. There are several adjustments made for the game. For example, compared to Halma, **caturing** is added. Comparing with Chinese Checker, the game plays on a square board, so more possible directions are added. Also, comparing with English Checkers, **jumping moves can be continue** and more directions as well.
+C&C Game: Capturing and Conquering Game
+
+The idea of the game is from Chinese Checkers, Halma Game, and English Checkers. There are several adjustments made to the game. For example, compared to Halma, **capturing** is added. Compared to Chinese Checker, the game plays on a square board, so more possible directions are added. Also, compared with English Checkers, **jumping moves can be continued** and more directions as well.
 
 #### The Game Board
 <img width="480" alt="image" src="https://user-images.githubusercontent.com/29009521/165926820-20f00b0e-70de-4e59-922b-4e17b7ea6e81.png">
 
 ## Game Rules
-The game can be start with the board in size of 6\*6 or 8\*8. The plyer who plays with the left-upper side (blue pieces) plays first.
+The game can be started with a board size of 6\*6 or 8\*8. The player who plays with the left-upper side (blue pieces) plays first.
 
 ### Winning Condition
-1. The player occupy the **target position**.
-2. The player *make the opponent have only one piece left on the board*, and the player has still more than one pieces.
+1. The player occupies the **target position**.
+2. The player *makes the opponent have only one piece left on the board*, and the player still has more than one-pieces.
 
 <img width="780" alt="image" src="https://user-images.githubusercontent.com/29009521/165927671-e13d820e-5a7c-4f84-a748-aa7c65d9c239.png">
 
 #### Target Position
-The farest position on the diagonal line.
-In a 6 * 6 setting game, for Player 1 (the left upper player), the target position is (6, 6). For Plyer 2 (the right lower player), the target position would be (0, 0).
+The farthest position on the diagonal line.
 
+In a 6 * 6 setting game, for Player 1 (the left upper player), the target position is (6, 6). The target position for Plyer 2 (the right lower player) would be (0, 0).
+
+<img>
 
 #### Draw?
-The original setting of the draw condition would be both players have only one piece left on the board. However, in the current design of the game it will not happen.
+1. The first setting of the draw condition would be both players have only one piece left on the board. However, it will not happen with the current rules of the game since the previous stage would be a winning condition for another player.
+2. One player may have no possible move. In this condition, it should be a draw. For example, player 1 occupies (5, 3), (4, 5), and player 2 occupies (5, 5), (5, 4). The next turn comes to player 1, and the player will have no valid moves.
 
-### How to move: Normal Move
-In normal move, a player can only move in the directions that getting closer to the target position. When moving in normal move method, the player can only move one time in a round. There are three possible directions.
+### How to move?
+There are two kinds of moving methods: (1) Normal Move and (2) Jumping Move. A player can only place a normal move in a round but several jumping moves in a single round. However, when the player places a normal move, the player cannot go on a jumping move in that round. On the other hand, there is **capturing** included in the jumping moves.
+
+#### How to move: Normal Move
+In the normal move, a player can only move in the direction that getting closer to the target position. When moving in the normal move method, the player can only move one time in a single round. There are three possible directions.
 
 
 
-### How to move: Jumping Move
-The jumping idea is similar to the Halma Game or Engilish Checkers. A piece can jump over the pieces which are in its neighbors; that is, 8 possible directions. A piece can jump over both self-player's pieces and opponent's pieces. Jumping moves can be continuely, and the plyer can choose which position to stop. Also, there is a **capturing** in a jumping move. When a piece jumps over any opponent's pieces, the first opponent's piece is captured.
+#### How to move: Jumping Move
+The jumping idea is similar to the Halma Game or English Checkers. A piece can jump over the pieces which are in its neighbors; that is, eight possible directions. A piece can jump over both self-player's pieces and opponent's pieces. Jumping moves can be continued, and the plyer can choose which position to stop. 
+
+##### Capturing
+Also, the game includes a **capturing** in a jumping move. When a piece jumps over any opponent's pieces, the first opponent's piece is captured. In each round, there is only at most one piece is captured.
 
 <img width="931" alt="image" src="https://user-images.githubusercontent.com/29009521/165925491-9295db4f-5837-4aac-8d2a-fe695f2e8339.png">
 
-Assuming it is the turn for the blue player, and the player would like to play on the piece on (1, 2). There are 14 possible move methods for this single piece. In the image, the star is the starting position, and the yellow circles are the possible ending positions. The blue triangle is possible captured pieces. One normal move is identified with the green circle.
+
+> Assuming it is the turn for the blue player, and the player would like to play on the piece on (1, 2). There are 14 possible move methods for this single piece. The star is the starting position in the image, and the yellow circles are the possible ending positions. The blue triangle is the possible captured piece. One normal move is identified with the green circle.
+
+----
 
 ## How to start the game?
 ### Starting the app (The complete GUI for the game is not complete!)
-*At current stage, you should run the main.py file with the command line.*
+*At the current stage, you should run the main.py file with the command line.*
 After that, the app will ask you to choose the player types for Player 1 and Player 2.
-Both Player 1 and Player 2 can be one of the three types, so you can choose to play with a randoming computer, a smarter computer, or even another human.
+Both Player 1 and Player 2 can be one of the three types, so you can choose to play with a random computer, a smarter computer, or even another human.
 
 Belows is the message from the app:
 
@@ -57,69 +71,102 @@ After picking up the player types, the game will start (GUI will show up after t
 ----
 # Technical Side of The Game
 ## GUI
-The GUI of the game is built with PyGame.
+The GUI of the game is built with `PyGame`.
 
 ## The program
 ### Classes
 #### Board and Moves
-- `Move`: a class records and deals with a move.
-- `GameBoard`: a class deals with a game status, including the players' positions, score of current status
-  - `encoder()` and `decoder()`: for hasing in recording game status. It is used for the smart players when learning (depth searching) for how to move. By the implementation, the cost for evaluating could be reduced.
+- `Move`: class records and deals with moves.
+- `GameBoard`: a class deals with a game status, including the players' positions, a score of the current status
+  - `encoder()` and `decoder()`: for hashing in recording game status. It is used for smart players when learning (depth searching) how to move. By the implementation, I aimed to reduce the cost of evaluation.
 
 #### Players
+- `HumanPlayer`: the client deals with the human user as a player.
+- `RandomPlayer`: the client to deal with a random player.
+- `SmartPlayer`: the client deals with the smart player.
+Each class is dealing how players play with each other. There is a function `choose_a_move()` included in each class. Depending on the player type, the way and logic of making a move are quite different:
+- `HumanPlayer.choose_a_move()`: O(n), it takes O(n) to list out and visualizes all possible moves, where *n* should be considered as the number of all possible moves. The function will list out all options to the user and makes moves by the user's input options.
+- `RandomPlayer.choose_a_move()`: O(1); The function will randomly pick a move in the valid moves set (which is already generated by another function `generate_moves()`. Please refer to the part "Functions".)
+- `SmartPlayer.choose_a_move()`: O(n<sup>depth</sup>); Please refer to the part "Functions" and "The Smart Player".
 
 ### Functions
-- `is_valid`: To test if a move is valid or not.
-- `generate_moves`: Generate all possible move for player in a given game status.
-- `make_a_move`: Change Game status with a valid move, and it will generate another game status.
+- `is_winning()`: O(1); Test the board status to see if it matches the winning/losing condition.
+- `is_valid()`: O(n); Test the board status to see if a move is valid or not. (where n is the board size.)
+- `generate_moves()`: 
+    O(n<sup>2</sup>); Generate all possible moves for the player in a given game status. (where n should be the number of pieces, but if n as the board size is still a valid statement.) The function includes two operations:
+    1. Normal Moves: where takes O(1) complexity. The function generate_moves( ) deals with normal moves by trying three neighbor directions.
+    2. Jumping Moves: where takes O(n<sup>2</sup>) complexity. The function `generate_moves()` deals with the jumping move, using a brute force searching process to get all valid end positions.
+- `make_a_move()`: 
+    O(n); Change Game status with a valid move, and it will generate another game status. `deepcopy()` would take O(n) complexity. (where n is the board size.)
 
 ----
 ## Process of a round
 For each move, the app will list out all valid moves for the turn players. After 
 
 ### Algorithms for generating moves
-The moves are generated by 
+As mentioned, the moves are generated by `generate_moves()`. 
+There are two parts for generating moves: (1) part for Normal Moves (2) part for Jumping Moves.
 
 #### Algorithms for getting normal moves
-- Complexity: O(n)
+- Complexity: O(1)
+The function `generate_moves()` where dealing with normal moves basically try three directions for self-player's positions.
 
-
-#### Algorithms for getting jumpging moves
-- Complexity: O(n^2)
-
-### Algorithms for choosing a move
-
+#### Algorithms for getting jumping moves
+- Complexity: O(n<sup>2</sup>)
+When starting a jump, the function `generate_moves()`, which deals with the jumping move, will start with a brute force searching process to get all valid end positions. 
+The function will generate and record all possible moves.
 
 -----
 ## The Smart Player
-The smart player is built aimming to play better than random when competing with a human player. 
+The smart player is built aiming to play better than random when competing with a human player. As mentioned, the move choosing process by the smart player is realized by the function `SmartPlayer.choose_a_move()`, where a mini-max-like algorithm is included. Depth is the thinking depth of the Smart Player. In the Current setting, the depth is three.
 
-### Strategy of The Smart Player
+- Complexity: O(n<sup>depth</sup>)
+
+For making each move, the smart player will think three steps further. It will consider and evaluate each board after moves. For each stage, it will choose the best score for the move. The evaluation is defined by the given strategies that we will discuss further. Also, it assumes that the opponent plays with the same strategy.
+
+### Strategies for The Smart Player
+These are the concepts for implementing the Samrt Player:
 1. Reduce opponents' pieces
 2. Get closer to the target position
-3. Prevent itself from caturing by the opponent
-4. Prevent the opponent from getting closer to the target point
-5. Prefer a strong structure with connection
+3. Prevent itself from being captured by the opponent
+4. *Prevent the opponent from getting closer to the target point*
+5. *Prefer a strong structure with pieces' connection*
 
-#### 1. Reduce Opponent's pieces
-#### 2. Get Closer to the target position
-#### 3. Prevent itself from caturing by the opponent
-#### 4. 
+#### 1. Reduce the Opponent's pieces
+A board with more self's pieces and less Opponent's pieces would get a higher score. Weighting for the number of pieces is included in the evaluations.
 
+#### 2. Get closer to the target position
+Distance to the target position is included in the evaluations.
 
-### Performance of The Smart Player
-#### Rounds Consuming:
-- The rounds count for a random player competeing with a random player: 0.1 secs.
-- The rounds count for a smart player competeing with a random player: 20 secs.
+#### 3. Prevent itself from capturing by the Opponent
+If a player loses a piece on the board, the evaluation includes the score reduction.
 
-#### Time Consuming:
+#### Performance of the Smart Player's Implementation
+
+```
+Total Games: 50
+Total Time: 7744.0971930000005
+Smart Players Total Wins: 33
+Smart Players Total Looses: 17
+Draws: 0
+```
+The result suggested that the Smart Player can dominate the Random Player. The reason might be that there are tons of possible moves after the mid-stages of the game. Some moves might be strictly better than the others. Also, the game can be considered *irreversible* to previous stages by further moving. Therefore, if the AI player can capture some of these patterns, it can play far better than randomly.
+
+However, this does not apply to competing with human players. The reason is that humans can think more further steps and adjustable strategies than the AI player. Further tests should be included.
+
+#### The Smart Player is Time Consuming
+
 - The average time per game for a random player competeing with a random player: 0.1 secs.
 - The average time per game for a smart player competeing with a random player: 20 secs.
 
+-----
+## Overall Performance Report
+
+This is the result of running one single game with Player 1 as the Smart Player and Player 2 as the Random Player. As the resport suggested, 
 
 -----
 # Other Topics
-## Is there first-mover advantages?
+## Are there first-mover advantages?
 ### Compete between two random players for 1000 rounds:
 
 ```
@@ -133,44 +180,50 @@ Draws: 0
 From the result, we can see that the winning for Player 1 and Player 2 are both close to 50%.
 There is no significant advantages for the player orders.
 
-### 
+### Compete between two AI players for 50 rounds:
+
 
 
 -----
 # Future Improvement
-## A complete GUI
+## A Better GUI
+A GUI that do not require the command line. Player can drag the pieces directly to make a move.
 
-## A faster smart player
+## A Faster Smart Player
 
-## A smarter smart player
+
+## An adjustable board size with the smart palyer
+In current settings, the board size is defined in the `class: GameBoard` and the size constant is changable. However, when the board size getting larger, the Smart Player cannot generate the moves in the reasonable time. The reason might be that too many possible status in the mid-stages of the game. This improvement shoulf compiled with the faster AI player mentioned above.
 
 -----
-# 2022 Spring Projects Description
-Each project from this semester is a public fork linked from this repository.  This is just one of the many assignments students worked on for the course, but this is the *only* one they are permitted to publish openly.
-
-## Final Project Expectations:
-You have considerable flexibility about specifics and you will publish your project openly (as a fork from here) to allow making it part of your portfolio if you choose.  You may work alone or in a team of two students. 
-
-Regardless of topic, it must involve notable amounts of original work of your own, though it can of course use existing libraries or be inspired by or adapted from some other published work(s). 
-
-PLAGIARISM IS NOT ACCEPTABLE. From the first commit through all production of documentation and code, it must be crystal clear which, if any, parts of the project were based on or duplicated from any other source(s) all of which must be cited.  This should be so specific that any evaluator can tell which lines of code are original work and which aren't.  Same for all written narrative, documentation, images, significant algorithms, etc.
-
-## Project Types you may choose:
-
-(Making original _variations_ of puzzles and games isn't as difficult as it may seem -- we'll discuss this in class. _Though admittedly, making *good* game variations -- that are well-balanced, strategically interesting, with good replay value_ can take expertise or luck and play-testing with revisions.  Such balanced elegance is desirable but might not be achievable here, given the short time you have.)
-
-1. Devise your own new _original_ type of logic puzzle or an _original variation_ of existing puzzle type. Like with previous homework, your program should be able to randomly generate many puzzles of your type and to verify that all puzzles generated comply with the standard meta-rule that only one valid solution exists. It needs to output the unsolved puzzles in a way that a human can print or view them conveniently to try solving them and to somehow output (to file?) or display the solution for each puzzle when requested, so as not to spoil the challenge. An interactive UI to "play" the puzzles interactively is *not* required.
-
-2. OR develop an AI game player for an _original variation_ of some existing strategy game.  If you do this, it needs to be set up so it can either play computer-vs-computer and/or against human players with a reasonable text or graphical UI. 2B. If two teams want to independently develop AI players for the same type of game variant as each other (but using different algorithms, strategies, and/or data structures) so they can compete, that is okay.  A sub-variation is to enable this game type on our course game server, discuss with the instructor if this is of interest.
-
-3. OR Computationally 'Solve' a game.  _Background: Some strategic games, especially those of perfect information are known to be "solved". See https://en.wikipedia.org/wiki/Solved_game, which we discussed in class._  Sometimes these proofs are done through mathematical analysis, other times through exhaustive computational verification. If you choose this option, you can either write your own code or modify some existing code that plays a game, to exhaustively analyze a game to attempt to prove if it is "solved" in this way for certain configurations. Changes to rules or conditions of a known solved game can alter this outcome and require reanalysis.
+# Reference
 
 
-## Deliverables and other Requirements:
-
-* Have some fun!
-* In your own fork, please replace this README.md file's contents with a good introduction to your own project. 
-* Targeted Algorithm Analysis:  Regardless of which option you choose, you need to _describe the performance characteristics of some critical parts of your program and explain why you chose the data structures and core algorithm(s) you did_. So for example, if you chose Type #1, what's the Big-O, Big-Theta, or Big-Omega run-time complexity of your puzzle solver? Or the puzzle generator? If you're doing Type #2 and using minimax or similar, what's the complexity of your heuristic evaluation function?  
-* Performance Measurement: Supplement the analysis above with run-time measurements of multiple iterations of the game or puzzles as discussed in class.
-* If your team has more than one student, see that everyone makes substantial git commits. In addition, your README documentation should include a summary of how you shared the work.
-* Live in-class presentation & demonstration of your work.
+-----
+> # 2022 Spring Projects Description
+>Each project from this semester is a public fork linked from this repository.  This is just one of the many assignments students worked on for the course, but this is the *only* one they are permitted to publish openly.
+>## Final Project Expectations:
+>You have considerable flexibility about specifics and you will publish your project openly (as a fork .from here) to allow making it part of your portfolio if you choose.  You may work alone or in a team of two students. 
+>
+>Regardless of topic, it must involve notable amounts of original work of your own, though it can of course use existing libraries or be inspired by or adapted from some other published work(s). 
+>
+>PLAGIARISM IS NOT ACCEPTABLE. From the first commit through all production of documentation and code, it must be crystal clear which, if any, parts of the project were based on or duplicated from any other source(s) all of which must be cited.  This should be so specific that any evaluator can tell which lines of code are original work and which aren't.  Same for all written narrative, documentation, images, significant algorithms, etc.
+>
+>## Project Types you may choose:
+>
+>(Making original _variations_ of puzzles and games isn't as difficult as it may seem -- we'll discuss this in class. _Though admittedly, making *good* game variations -- that are well-balanced, strategically interesting, with good replay value_ can take expertise or luck and play-testing with revisions.  Such balanced elegance is desirable but might not be achievable here, given the short time you have.)
+>
+>1. Devise your own new _original_ type of logic puzzle or an _original variation_ of existing puzzle type. Like with previous homework, your program should be able to randomly generate many puzzles of your type and to verify that all puzzles generated comply with the standard meta-rule that only one valid solution exists. It needs to output the unsolved puzzles in a way that a human can print or view them conveniently to try solving them and to somehow output (to file?) or display the solution for each puzzle when requested, so as not to spoil the challenge. An interactive UI to "play" the puzzles interactively is *not* required.
+>
+>2. OR develop an AI game player for an _original variation_ of some existing strategy game.  If you do this, it needs to be set up so it can either play computer-vs-computer and/or against human players with a reasonable text or graphical UI. 2B. If two teams want to independently develop AI players for the same type of game variant as each other (but using different algorithms, strategies, and/or data structures) so they can compete, that is okay.  A sub-variation is to enable this game type on our course game server, discuss with the instructor if this is of interest.
+>
+>3. OR Computationally 'Solve' a game.  _Background: Some strategic games, especially those of perfect information are known to be "solved". See https://en.wikipedia.org/wiki/Solved_game, which we discussed in class._  Sometimes these proofs are done through mathematical analysis, other times through exhaustive computational verification. If you choose this option, you can either write your own code or modify some existing code that plays a game, to exhaustively analyze a game to attempt to prove if it is "solved" in this way for certain configurations. Changes to rules or conditions of a known solved game can alter this outcome and require reanalysis.
+>
+>## Deliverables and other Requirements:
+>
+>* Have some fun!
+>* In your own fork, please replace this README.md file's contents with a good introduction to your own project. 
+>* Targeted Algorithm Analysis:  Regardless of which option you choose, you need to _describe the performance characteristics of some critical parts of your program and explain why you chose the data structures and core algorithm(s) you did_. So for example, if you chose Type #1, what's the Big-O, Big-Theta, or Big-Omega run-time complexity of your puzzle solver? Or the puzzle generator? If you're doing Type #2 and using minimax or similar, what's the complexity of your heuristic evaluation function?  
+>* Performance Measurement: Supplement the analysis above with run-time measurements of multiple iterations of the game or puzzles as discussed in class.
+>* If your team has more than one student, see that everyone makes substantial git commits. In addition, your README documentation should include a summary of how you shared the work.
+>* Live in-class presentation & demonstration of your work.

@@ -78,7 +78,6 @@ class SmartPlayer:
         elif self_player == 'player_2':
             opponent_player = 'player_1'
 
-        # valid_moves_dict = board.list_all_valid_moves()
         valid_moves_score = {}
 
         best_move = None
@@ -90,9 +89,10 @@ class SmartPlayer:
             # Initialzing
             # When making a move it will go into the next turn (the opponent's turn)
             temp_score = 0
-            temp_board = make_a_move(board, move)
+            temp_board = make_a_move(board, move) # in the temp board, the player would be the opponent
             key = temp_board.encoder()
             
+            # Get the evaluated score in the history
             if key in self.learned_board.keys():
                 if temp_board.turn_player == opponent_player:
                     temp_score = self.learned_board[key].board_score
@@ -102,6 +102,7 @@ class SmartPlayer:
                     best_move = move
                     best_score = temp_score
 
+            # Initialize a best move 
             if not best_move:
                 best_move = move
                 temp_board.evaluation()
@@ -110,6 +111,7 @@ class SmartPlayer:
                 elif temp_board.turn_player == self_player:
                     best_score = temp_board.opponent_score
             
+            # Depth Search to judge a move
             depth = 1
             while depth < max_depth:                
                 # In the opponent's turn, the opponent will also try to maximize their score
@@ -120,7 +122,8 @@ class SmartPlayer:
                     next_move, s = self.choose_a_move(temp_board, self_player, max_depth=max_depth-1)
                     temp_board = make_a_move(temp_board, next_move) # player change to self
 
-                    # Next Turn: Self
+                    # Next Player: Self
+
                     # if temp_board.is_winning(): # self is winning
                     #     # print('Player %s: SELF WINNING' %(temp_board.turn_player))
                     #     # dominant_move = move
@@ -135,6 +138,7 @@ class SmartPlayer:
                         break
                     next_move, s = self.choose_a_move(temp_board, self_player, max_depth=max_depth-1)
                     temp_board = make_a_move(temp_board, next_move) # player change to the opponent
+
 
                     # Next Turn: Opponent
                     # if temp_board.is_loosing(): # opponent is loosing
@@ -168,15 +172,15 @@ class SmartPlayer:
 ### ---------------------------------------- ###
 # Start a game
 
-# try_pos_1 = [(0, 1), (1, 1), (0, 2), (2, 2)]
-# try_pos_2 = [(5, 5), (3, 1), (3, 4), (4, 3)]
-# game = GameBoard(p1_position=try_pos_1, p2_position=try_pos_2, turn_player='player_1')
-
+# game = GameBoard()
 # game.generate_round_moves()
 
-# game = GameBoard()
-# random.seed(57)
+# try_pos_1 = [(5, 3), (4, 5)]
+# try_pos_2 = [(5, 5), (5, 4), (0, 3), (0, 2)]
+# game = GameBoard(p1_position=try_pos_1, p2_position=try_pos_2, turn_player='player_1')
 
+# random.seed(18)
+# #%%
 # # HumanPlayer, SmartPlayer, or RandomPlayer
 # player_1 = SmartPlayer(player=1)
 # player_2 = RandomPlayer(player=2)
@@ -200,7 +204,6 @@ class SmartPlayer:
 #     game = make_a_move(game, move)
 #     round += 1
 
-# print('The Winner:', current_player, '; Total rounds of the game:', round)
-
+# print('The Winner:', game.turn_player, '; Total rounds of the game:', round)
 # print('RESULT:\nP1: %s\nP2: %s'%(game.p1_position, game.p2_position))
 # %%
