@@ -14,7 +14,6 @@ import random
 ### ---------------------------------------- ###
 class Move:
     def __init__(self, start_pos=None, end_pos=None, removed_opponent_pos=None, jump_through_pos=[]) -> None:
-        # print('removed opponent pos: ', removed_opponent_pos)
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.removed_opponent_pos = removed_opponent_pos
@@ -81,10 +80,8 @@ class GameBoard:
         p2_position = []
         while pos_pointer < len(key):
             if key[pos_pointer:pos_pointer+2] == '01':
-                # print(key[pos_pointer:pos_pointer+2], (i,j))
                 p1_position = p1_position + [(i, j)]
             elif key[pos_pointer:pos_pointer+2] == '11':
-                # print(key[pos_pointer:pos_pointer+2], (i,j))
                 p2_position = p2_position + [(i, j)]
 
             pos_pointer += 2
@@ -109,7 +106,6 @@ class GameBoard:
             current_position = self.p1_position
 
         for pos in current_position:
-            # print('\n\nGENERATE moves for %s' % (str(pos)))
             valid_move_list = valid_move_list + \
                 generate_moves(self, start_pos=pos)
         self.valid_move_list = valid_move_list
@@ -140,7 +136,6 @@ class GameBoard:
         if self.valid_move_list == []:
             self.generate_round_moves()
             if self.valid_move_list == []:
-                print("It is a draw: {} has no possible move. {}", self.turn_player, self.valid_move_list)
                 return True
         
         return False
@@ -159,12 +154,14 @@ class GameBoard:
         # If self winning
         if self.is_loosing():
             self_score += -9999999
+            # self_score += -1000
             oppo_score += 1000
 
         # If self loosing
         if self.is_winning():
             self_score += 1000
             oppo_score += -9999999
+            # oppo_score += -1000
 
         # If the game draw
         if self.is_draw():
@@ -227,7 +224,6 @@ def is_valid(status: GameBoard, start_pos: tuple, end_pos: tuple, last_pos: tupl
 
     # Prevent jumping into back patterns
     if jump_through and previous_steps:
-        # print('jump_through', jump_through, 'previous_steps.jump_through_pos:', previous_steps.jump_through_pos)
         if jump_through in previous_steps.jump_through_pos or end_pos == previous_steps.start_pos:
             return False
 
@@ -240,10 +236,6 @@ def generate_moves(status: GameBoard, start_pos: tuple,
     start_pos: the original position the piece stands
     previous_steps: a valid move
     """
-    # print('\nstart pos:', start_pos)
-    # if previous_steps:
-    #     print('the original start: ', previous_steps.start_pos)
-
     valid_moves = []
     # status 1: a initial start (when start jumping, we cannot use the normal move method)
     if not is_jumping:
@@ -278,13 +270,11 @@ def generate_moves(status: GameBoard, start_pos: tuple,
 
             if is_valid(status, start_pos, move_pos, last_pos=last_pos,
                         jump_through=neighbor, previous_steps=previous_steps):
-                # print('is a valid jump:', move_pos, 'the last pos:', last_pos)
 
                 new_status = deepcopy(status)
-                # print(previous_steps)
+
                 # If previous jumps had remove a pos
                 if previous_steps is not None:
-                    # print('previous remove:', previous_steps.removed_opponent_pos)
                     remove_pos = previous_steps.removed_opponent_pos
                 else:
                     remove_pos = None
@@ -293,22 +283,16 @@ def generate_moves(status: GameBoard, start_pos: tuple,
                 if status.turn_player == 'player_1':
                     new_status.p1_position.remove(start_pos)
                     new_status.p1_position.add(move_pos)
-                    # if (not has_remove) and neighbor in new_status.p2_position:
                     if (not remove_pos) and neighbor in new_status.p2_position:
                         remove_pos = neighbor
-                        # print('*** A remove:', remove_pos)
                         new_status.p2_position.remove(remove_pos)
-                        # has_remove = True
 
                 elif status.turn_player == 'player_2':
                     new_status.p2_position.remove(start_pos)
                     new_status.p2_position.add(move_pos)
-                    # if (not has_remove) and neighbor in new_status.p1_position:
                     if (not remove_pos) and neighbor in new_status.p1_position:
                         remove_pos = neighbor
-                        # print('*** A remove:', remove_pos)
                         new_status.p1_position.remove(remove_pos)
-                        # has_remove = True
 
                 # Add the option to the result set
                 if not previous_steps:

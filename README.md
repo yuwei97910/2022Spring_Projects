@@ -211,6 +211,15 @@ There is no significant advantages for the player orders.
 
 ### Compete between two AI players for 50 rounds:
 
+Both Player 1 and Player 2 are the Smart Player.
+```
+Total Games: 50
+Total Time: 7499.822007
+Player 1 Total Wins: 0
+Player 2 Total Wins: 50
+Draws: 0
+```
+
 #### Why Player 2 always win?
 In current settings, there is no randomization included in the Smart Player. Therefore, if two Smart Players are playing, it will always end in the same status because of the defined strategies for evaluation.
 
@@ -225,6 +234,11 @@ A GUI that do not require the command line. Player can drag the pieces directly 
 
 ## A Faster Smart Player
 As mentioned, currently, the Smart Player takes time to generate moves, especially in the mid-stages of the game. Too many possible moves are included, and the deep-searching recursive calls for evaluations for each would be very costly. If a better evaluation method is included, we may consider not going through a deep search.
+
+For the second solution, we can also consider a memory-based player. We can train the smart player with numerous games and make it memorize what the best actions are in a given stage. 
+
+#### No searching for a dominant move
+In current setting, it is interesting that the Smart Player does not take the winning immediately, and it is because of considering the next opponent's move. In this case, we should let it choose the move which directly wins a game.
 
 ## An adjustable board size with the smart palyer
 In current settings, the board size is defined in the `class: GameBoard` and the size constant is changable. However, when the board size getting larger, the Smart Player cannot generate the moves in the reasonable time. The reason might be that too many possible status in the mid-stages of the game. This improvement shoulf compiled with the faster AI player mentioned above.

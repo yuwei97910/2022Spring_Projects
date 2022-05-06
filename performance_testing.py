@@ -18,14 +18,14 @@ from game_players import HumanPlayer, RandomPlayer, SmartPlayer
 # --------------- #
 # Given testing options
 max_test = 50 # max testing rounds
-file_name = 'performance_testing_two_smart.txt'
+file_name = 'performance_testing.txt'
 
-ini_player_1 = SmartPlayer(player=1)
+ini_player_1 = RandomPlayer(player=1)
 ini_player_2 = SmartPlayer(player=2)
 
 # --------------- #
-ai_winning_cnt = 0
-ai_loosing_cnt = 0
+p1_winning_cnt = 0
+p2_winning_cnt = 0
 draw_cnt = 0
 
 record = open(file_name, 'w')
@@ -85,9 +85,9 @@ while test_round < max_test:
         winner = 'draw'
 
     if winner == 'player_1':
-        ai_winning_cnt += 1
+        p1_winning_cnt += 1
     elif winner == 'player_2':
-        ai_loosing_cnt += 1
+        p2_winning_cnt += 1
     else:
         draw_cnt += 1
 
@@ -99,7 +99,8 @@ total_time = total_end - total_start
 
 record.write((('Total Games: %s\n'% test_round)))
 record.write((('Total Time: %s\n'% total_time)))
-record.write((('Smart Players Total Wins: %s\n'% ai_winning_cnt)))
-record.write((('Smart Players Total Looses: %s\n'% ai_loosing_cnt)))
+record.write((('Player 1: %s; Player 2: %s'% (ini_player_1.turn_player, ini_player_2.turn_player))))
+record.write((('Player 1 Total Wins: %s\n'% p1_winning_cnt)))
+record.write((('Player 2 Total Wins: %s\n'% p2_winning_cnt)))
 record.write((('Draws: %s\n'% draw_cnt)))
 record.close()
